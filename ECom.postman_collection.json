@@ -1,0 +1,166 @@
+{
+	"info": {
+		"_postman_id": "70680d9f-50b4-43ee-987f-9d4376e7ecd3",
+		"name": "ECom",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GetPagination",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44311/v1/product?$count=true&$filter=Id gt 100&$select=Id,Name&$skip=100&$top=100",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44311",
+					"path": [
+						"v1",
+						"product"
+					],
+					"query": [
+						{
+							"key": "$count",
+							"value": "true"
+						},
+						{
+							"key": "$filter",
+							"value": "Id gt 100"
+						},
+						{
+							"key": "$select",
+							"value": "Id,Name"
+						},
+						{
+							"key": "$skip",
+							"value": "100"
+						},
+						{
+							"key": "$top",
+							"value": "100"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Count",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44311/v1/product/$count",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44311",
+					"path": [
+						"v1",
+						"product",
+						"$count"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Filter By Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44311/v1/product?$filter=Id eq 100",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44311",
+					"path": [
+						"v1",
+						"product"
+					],
+					"query": [
+						{
+							"key": "$filter",
+							"value": "Id eq 100"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Select",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44311/v1/product?$filter=Contains(Name ,'Product')",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44311",
+					"path": [
+						"v1",
+						"product"
+					],
+					"query": [
+						{
+							"key": "$filter",
+							"value": "Contains(Name ,'Product')"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OrderBy",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44311/v1/product?$filter=Id gt 100&$select=Id,Name&$skip=100&$top=100&$orderby=Id desc",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44311",
+					"path": [
+						"v1",
+						"product"
+					],
+					"query": [
+						{
+							"key": "$filter",
+							"value": "Id gt 100"
+						},
+						{
+							"key": "$select",
+							"value": "Id,Name"
+						},
+						{
+							"key": "$skip",
+							"value": "100"
+						},
+						{
+							"key": "$top",
+							"value": "100"
+						},
+						{
+							"key": "$orderby",
+							"value": "Id desc"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
