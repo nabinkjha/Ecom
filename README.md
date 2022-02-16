@@ -73,7 +73,7 @@ https://localhost:44311/v1/ProductCategory?$expand=Products($filter=Id eq 10)
 https://localhost:44311/v2/Product?$orderby=Id desc, Name desc&$expand=ProductCategory($select=Name;$orderby=Name)
 The blog is available at:
 
-https://medium.com/blog/posts/aspnet-core-oData-api
+https://medium.com/@nabinkjha/image-source-f258c5aedc33
 
 Leave a Star if you find the solution useful. It inspire me to contribute more
 
