@@ -1,6 +1,6 @@
 # ODataEcom - OData Sample code in ASPNETCORE
 
-ODataEcom is a boilerplate solution, built to demonstrate OData API implementation in an ASP.NET Core (.NET 5) API
+ODataEcom is a example solution, built to demonstrate OData API implementation in an ASP.NET Core (.NET 5) API. I have tried to cover multiple scenarios but feel free to create issues if I have misssed the one you needed.
 
 # What is OData?
 
