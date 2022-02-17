@@ -1,6 +1,6 @@
 # ODataEcom - OData Sample code in ASPNETCORE
 
-ODataEcom is a boilerplate solution, built to demonstrate OData API implementation in an ASP.NET Core (.NET 5) API
+ODataEcom is a example solution, built to demonstrate OData API implementation in an ASP.NET Core (.NET 5) API. I have tried to cover multiple scenarios but feel free to create issues if I have misssed the one you needed.
 
 # What is OData?
 
@@ -73,7 +73,7 @@ https://localhost:44311/v1/ProductCategory?$expand=Products($filter=Id eq 10)
 https://localhost:44311/v2/Product?$orderby=Id desc, Name desc&$expand=ProductCategory($select=Name;$orderby=Name)
 The blog is available at:
 
-https://medium.com/blog/posts/aspnet-core-oData-api
+https://medium.com/@nabinkjha/image-source-f258c5aedc33
 
 Leave a Star if you find the solution useful. It inspire me to contribute more
 
