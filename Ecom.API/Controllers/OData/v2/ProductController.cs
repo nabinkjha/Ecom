@@ -7,11 +7,12 @@ using Microsoft.AspNetCore.Http;
 using ECom.Core.Entities;
 using Microsoft.AspNetCore.OData.Formatter;
 using System.Collections.Generic;
+using ECom.API.Controllers.OData.Login;
 
 namespace ECom.API.Controllers.OData.v2
 {
     [Produces("application/json")]
-    public class ProductController : ODataController
+    public class ProductController : BaseODataController
     {
         private readonly IUnitOfWork _uow;
 

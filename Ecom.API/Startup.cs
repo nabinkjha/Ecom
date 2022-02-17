@@ -16,6 +16,9 @@ using Microsoft.AspNetCore.OData.Routing;
 using System.Collections;
 using Microsoft.AspNetCore.Http;
 using ECom.API.Utilities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace ECom.API
 {
@@ -67,7 +70,31 @@ namespace ECom.API
                     }
                 });
                 c.SwaggerDoc("v2", new OpenApiInfo { Title = "API v2", Version = "v2" });
-           
+                // To Enable authorization using Swagger (JWT)  
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                          new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "Bearer"
+                                }
+                            },
+                            new string[] {}
+
+                    }
+                });
                 //c.ExampleFilters();
                 c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
                 // Set the comments path for the Swagger JSON and UI.
@@ -78,7 +105,25 @@ namespace ECom.API
                 // see: https://github.com/domaindrivendev/Swashbuckle/issues/442
                 c.CustomSchemaIds(x => x.FullName);
             });
-           
+
+            services.AddAuthentication(option =>
+            {
+                option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = false,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = Configuration["Jwt:Issuer"],
+                    ValidAudience = Configuration["Jwt:Issuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])) //Configuration["JwtToken:SecretKey"]  
+                };
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -86,6 +131,8 @@ namespace ECom.API
         {
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseAuthorization();
+            app.UseAuthentication();
             // a test middleware
             app.Use(next => context =>
             {

@@ -1,16 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
-using Microsoft.AspNetCore.OData.Routing.Controllers;
 using ECom.Contracts.Data.Repositories;
 using System.Linq;
 using ECom.Core.Entities;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
+using ECom.API.Controllers.OData.Login;
 
 namespace ECom.API.Controllers.OData.v2
 {
     [Produces("application/json")]
-    public class ProductCategoryController : ODataController
+    public class ProductCategoryController : BaseODataController
     {
         private readonly IUnitOfWork _uow;
         public ProductCategoryController(IUnitOfWork uow)
@@ -24,9 +24,11 @@ namespace ECom.API.Controllers.OData.v2
         /// Request for v2/ProductCategory
         /// </summary>
         /// <returns>List of ProductCategory</returns>
+        /// <response code="200">Returns IEnumerable of ProductCategory </response>
+        /// <response code="401">If the user is not authorize or JWT token expired</response>   
         [EnableQuery(PageSize = 10, MaxExpansionDepth = 5)]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<Product>))]
-        [ProducesResponseType(404)]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<ProductCategory>))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [HttpGet("v2/ProductCategory")]
         public IActionResult Get()
         {
@@ -40,10 +42,14 @@ namespace ECom.API.Controllers.OData.v2
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Single ProductCategory</returns>
+        /// <response code="200">Returns a single Product that matches the Id </response>
+        /// <response code="404">Returns a 404 NotFound if the product category does not exist </response>
+        /// <response code="401">If the user is not authorize or JWT token expired</response>
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(200, Type = typeof(ProductCategory))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("v2/ProductCategory({id})")]
         [HttpGet("v2/ProductCategory/{id}")]
-        [ProducesResponseType(200, Type = typeof(ProductCategory))]
-        [ProducesResponseType(404)]
         public IActionResult Get(int id)
         {
             var entity = _uow.ProductCategory.Get(id);
@@ -61,7 +67,7 @@ namespace ECom.API.Controllers.OData.v2
         ///
         ///     POST /ProductCategory
         ///     {
-        ///        "name": "Product 1 ",
+        ///        "name": "ProductCategory 1 ",
         ///        
         ///     }
         ///
@@ -70,9 +76,11 @@ namespace ECom.API.Controllers.OData.v2
         /// <returns>A newly created ProductCategory</returns>
         /// <response code="201">Returns the newly created ProductCategory</response>
         /// <response code="400">If the item is null</response>            
-        [HttpPost("v2/ProductCategory")]
+        /// <response code="401">If the user is not authorize or JWT token expired</response>
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPost("v2/ProductCategory")]
         public ActionResult<ProductCategory> Create(ProductCategory item)
         {
             _uow.ProductCategory.Add(item);
@@ -96,6 +104,14 @@ namespace ECom.API.Controllers.OData.v2
         /// <param name="id"></param>
         /// <param name="item"></param>
         /// <returns></returns>
+        /// <response code="401">If the user is not authorize or JWT token expired</response>
+        /// <response code="400">Returns a 404 NotFound if the product category does not exist </response>
+        /// <response code="404">Returns a 400 BadRequest if the product category parameter is null or param id is not matched with id in the ProductCategory </response>
+        /// <response code="204">Returns a 204 NoContent if the request is successfuly completed. </response>
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [HttpPut("v2/ProductCategory")]
         public IActionResult Update(int id, ProductCategory item)
         {
@@ -122,6 +138,8 @@ namespace ECom.API.Controllers.OData.v2
         /// <summary>
         /// Deletes a specific ProductCategory.
         /// </summary>      
+        /// <response code="401">If the user is not authorize or JWT token expired</response>
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [HttpDelete("v2/ProductCategory")]
         public IActionResult Delete(int id)
         {
