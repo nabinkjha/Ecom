@@ -21,12 +21,13 @@ namespace ECom.API.Controllers.OData.v2
         /// <summary>
         /// Gets all Product
         /// Use the GET http verb
-        /// Request for v1/ProductCategory
+        /// Request for v2/ProductCategory
         /// </summary>
         /// <returns>List of ProductCategory</returns>
         [EnableQuery(PageSize = 10, MaxExpansionDepth = 5)]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<ProductCategory>))]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<Product>))]
         [ProducesResponseType(404)]
+        [HttpGet("v2/ProductCategory")]
         public IActionResult Get()
         {
             var items = _uow.ProductCategory.GetAll().AsQueryable();
@@ -35,16 +36,17 @@ namespace ECom.API.Controllers.OData.v2
         /// <summary>
         /// Gets single Product
         /// Use the GET http verb
-        /// Request for v1/ProductCategory(3)
+        /// Request for v2/ProductCategory(3)
         /// </summary>
-        /// <param name="key"></param>
+        /// <param name="id"></param>
         /// <returns>Single ProductCategory</returns>
-        [HttpGet]
+        [HttpGet("v2/ProductCategory({id})")]
+        [HttpGet("v2/ProductCategory/{id}")]
         [ProducesResponseType(200, Type = typeof(ProductCategory))]
         [ProducesResponseType(404)]
-        public IActionResult Get(int key)
+        public IActionResult Get(int id)
         {
-            var entity = _uow.ProductCategory.Get(key);
+            var entity = _uow.ProductCategory.Get(id);
             if (entity == null)
             {
                 return NotFound();

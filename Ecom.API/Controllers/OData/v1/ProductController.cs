@@ -28,6 +28,7 @@ namespace ECom.API.Controllers.OData.v1
         [EnableQuery(PageSize = 10, MaxExpansionDepth = 5)]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Product>))]
         [ProducesResponseType(404)]
+        [HttpGet("v1/Product")]
         public IActionResult Get()
         {
             var items = _uow.Product.GetAll().AsQueryable();
@@ -43,6 +44,8 @@ namespace ECom.API.Controllers.OData.v1
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(Product))]
         [ProducesResponseType(404)]
+        [HttpGet("v1/Product({id})")]
+        [HttpGet("v1/Product/{id}")]
         public IActionResult Get(int key)
         {
             var entity = _uow.Product.Get(key);

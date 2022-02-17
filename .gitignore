@@ -398,3 +398,6 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/Ecom.API/Controllers/OData/v2/AuthenticateController.cs
+/Ecom.API/Controllers/OData/v2/BaseODataController.cs
+/Ecom.API/Utilities/UserLogin.cs
