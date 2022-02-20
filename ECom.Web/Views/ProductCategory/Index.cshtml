@@ -1,0 +1,88 @@
+﻿
+@{
+    ViewData["Title"] = "Product Category";
+}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" />
+<div class="text-center">
+    <div class="col-lg-12">
+        
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+
+                    <table id="productTableId" class="table table-bordered" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>SKU</th>
+                                <th>slug</th>
+                                <th>Name</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+    <script>
+        var baseUrl = "@Url.Content("~/")";
+        $(function () {
+            LoadTable();
+            $(document).keypress(function (e) {
+                if (e.which == 13) {
+                    LoadTable();
+                }
+            });
+        })
+
+        function LoadTable() {
+            $('#productTableId').dataTable().fnDestroy();
+            $('#productTableId').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "filter": true,
+                "ordering": true,
+                "deferRender": true,
+                "drawCallback": function () {
+                    $("#dataTable_wrapper").children().eq(1).css("overflow", "auto");
+                },
+                //"ajax": baseUrl +"sample.json",
+                "ajax": {
+                    "type": "POST",
+                    "url": baseUrl + "ProductCategory/GetList",
+                    "datatype": "json",
+                    "contentType": "application/json; charset=utf-8",
+                    //"headers": { 'RequestVerificationToken': $('#__RequestVerificationToken').val() },
+                    "data": function (data) {
+                        return JSON.stringify(data);
+                    }
+                },
+                "columnDefs": [{
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                },
+                    {
+                        "targets": 4,
+                        "data": "edit_link",
+                        "render": function (data, type, row, meta) {
+                            return "<a href='#' class='btn btn-primary' onclick=EditProduct('" + row.id + "'); >Edit</a><a href='#' class='btn btn-danger' onclick=DeleteProduct('" + row.id + "'); >Delete</a>";
+                        }
+                    }
+                ],
+                "columns": [
+                    { "data": "id", "name": "Id", "autoWidth": true},
+                    { "data": "sku", "name": "SKU", "autoWidth": true},
+                    { "data": "slug", "name": "Slug", "autoWidth": true},
+                    { "data": "name", "name": "Name", "autoWidth": true},
+                ],
+             "order":[1,"desc"]
+            })
+        }
+    </script>
+}

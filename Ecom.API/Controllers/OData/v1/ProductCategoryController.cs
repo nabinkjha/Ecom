@@ -6,10 +6,12 @@ using System.Linq;
 using ECom.Core.Entities;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
+using System.Net.Mime;
 
 namespace ECom.API.Controllers.OData.v1
 {
-    [Produces("application/json")]
+    [Produces(MediaTypeNames.Application.Json)]
+    [Consumes(MediaTypeNames.Application.Json)]
     public class ProductCategoryController : ODataController
     {
         private readonly IUnitOfWork _uow;
