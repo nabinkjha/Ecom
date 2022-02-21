@@ -1,0 +1,294 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ECom.API</name>
+    </assembly>
+    <members>
+        <member name="M:ECom.API.Controllers.OData.v1.ProductCategoryController.Get">
+            <summary>
+            Gets all Product
+            Use the GET http verb
+            Request for v1/ProductCategory
+            </summary>
+            <returns>List of ProductCategory</returns>
+        </member>
+        <member name="M:ECom.API.Controllers.OData.v1.ProductCategoryController.Get(System.Int32)">
+            <summary>
+            Gets single Product
+            Use the GET http verb
+            Request for v1/ProductCategory(3)
+            </summary>
+            <param name="id"></param>
+            <returns>Single ProductCategory</returns>
+        </member>
+        <member name="M:ECom.API.Controllers.OData.v1.ProductCategoryController.Create(ECom.Core.Entities.ProductCategory)">
+             <summary>
+             Creates a ProductCategory.
+             </summary>
+             <remarks>
+             Sample request:
+            
+                 POST v1/ProductCategory
+                 {
+                    "name": "Category 1",
+                    
+                 }
+            
+             </remarks>
+             <param name="item"></param>
+             <returns>A newly created Product</returns>
+             <response code="201">Returns the newly created ProductCategory</response>
+             <response code="400">If the item is null</response>            
+        </member>
+        <member name="M:ECom.API.Controllers.OData.v1.ProductCategoryController.Update(System.Int32,ECom.Core.Entities.ProductCategory)">
+             <summary>
+             Update a specific ProductCategory.
+             </summary>
+             <remarks>
+             Sample request:
+            
+                 PUT v1/ProductCategory/1
+                 {
+                    "id": 1,
+                    "name": "Category Update",
+                    
+                 }
+            
+             </remarks>
+             <param name="id"></param>
+             <param name="item"></param>
+             <returns></returns>
+        </member>
+        <member name="M:ECom.API.Controllers.OData.v1.ProductCategoryController.Delete(System.Int32)">
+            <summary>
+            Deletes a specific ProductCategory.
+            </summary>
+            <param name="id"></param>        
+        </member>
+        <member name="M:ECom.API.Controllers.OData.v1.ProductController.Get">
+            <summary>
+            Gets all Product
+            Use the GET http verb
+            Request for v1/Product
+            </summary>
+            <returns>List of Products</returns>
+        </member>
+        <member name="M:ECom.API.Controllers.OData.v1.ProductController.Get(System.Int32)">
+            <summary>
+            Gets single Product
+            Use the GET http verb
+            Request for v1/Product(3)
+            </summary>
+            <param name="id"></param>
+            <returns>Single Product</returns>
+        </member>
+        <member name="M:ECom.API.Controllers.OData.v1.ProductController.Create(ECom.Core.Entities.Product)">
+             <summary>
+             Creates a Product.
+             Use the POST http verb.
+             Request for v1/product
+             Set Content-Type:Application/Json
+             </summary>
+             <remarks>
+             Sample request:
+            
+                 POST /Product
+                 {
+                    "id": 0, To create a new product pass id as 0.
+                    "name": "Product 1 ",
+                    "producttypeid": 3
+                 }
+            
+             </remarks>
+             <param name="item"></param>
+             <returns>A newly created Product</returns>
+             <response code="201">Returns the newly created Product</response>
+             <response code="400">If the item is null</response>            
+        </member>
+        <member name="M:ECom.API.Controllers.OData.v1.ProductController.Update(System.Int32,ECom.Core.Entities.Product)">
+             <summary>
+             Update a specific Product.
+             Saves the entire Product object to the object specified by key (id). 
+             Use the PUT http verb
+             Request for v1/product(1)
+             Set Content-Type:Application/Json
+             </summary>
+             <remarks>
+             Sample request:
+               Is supposed to overwrite all properties.
+                 PUT /Product/1
+                 {
+                    "id": 1,
+                    "name": "Updated Value",
+                    
+                 }
+            
+             </remarks>
+             <param name="id"></param>
+             <param name="item"></param>
+             <returns></returns>
+        </member>
+        <member name="M:ECom.API.Controllers.OData.v1.ProductController.Delete(System.Int32)">
+            <summary>
+            Use the DELETE http verb
+            Request for v1/product(5) or v1/product/5
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+            <summary>
+            Deletes a specific Product.
+            </summary>
+        </member>
+        <member name="M:ECom.API.Controllers.OData.v2.ProductCategoryController.Get">
+            <summary>
+            Gets all Product
+            Use the GET http verb
+            Request for v2/ProductCategory
+            </summary>
+            <returns>List of ProductCategory</returns>
+            <response code="200">Returns IEnumerable of ProductCategory </response>
+            <response code="401">If the user is not authorize or JWT token expired</response>   
+        </member>
+        <member name="M:ECom.API.Controllers.OData.v2.ProductCategoryController.Get(System.Int32)">
+            <summary>
+            Gets single Product
+            Use the GET http verb
+            Request for v2/ProductCategory(3)
+            </summary>
+            <param name="id"></param>
+            <returns>Single ProductCategory</returns>
+            <response code="200">Returns a single Product that matches the Id </response>
+            <response code="404">Returns a 404 NotFound if the product category does not exist </response>
+            <response code="401">If the user is not authorize or JWT token expired</response>
+        </member>
+        <member name="M:ECom.API.Controllers.OData.v2.ProductCategoryController.Create(ECom.Core.Entities.ProductCategory)">
+             <summary>
+             Creates a ProductCategory.
+             </summary>
+             <remarks>
+             Sample request:
+            
+                 POST /ProductCategory
+                 {
+                    "name": "ProductCategory 1 ",
+                    
+                 }
+            
+             </remarks>
+             <param name="item"></param>
+             <returns>A newly created ProductCategory</returns>
+             <response code="201">Returns the newly created ProductCategory</response>
+             <response code="400">If the item is null</response>            
+             <response code="401">If the user is not authorize or JWT token expired</response>
+        </member>
+        <member name="M:ECom.API.Controllers.OData.v2.ProductCategoryController.Update(System.Int32,ECom.Core.Entities.ProductCategory)">
+             <summary>
+             Update a specific ProductCategory.
+             </summary>
+             <remarks>
+             Sample request:
+            
+                 PUT /ProductCategory/1
+                 {
+                    "id": 1,
+                    "name": "ProductCategory Update",
+                    
+                 }
+            
+             </remarks>
+             <param name="id"></param>
+             <param name="item"></param>
+             <returns></returns>
+             <response code="401">If the user is not authorize or JWT token expired</response>
+             <response code="400">Returns a 404 NotFound if the product category does not exist </response>
+             <response code="404">Returns a 400 BadRequest if the product category parameter is null or param id is not matched with id in the ProductCategory </response>
+             <response code="204">Returns a 204 NoContent if the request is successfuly completed. </response>
+        </member>
+        <member name="M:ECom.API.Controllers.OData.v2.ProductCategoryController.Delete(System.Int32)">
+            <summary>
+            Use the DELETE http verb
+            Request for v2/productcategory(5) or v2/productcategory/5
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+            <summary>
+            Deletes a specific ProductCategory.
+            </summary>      
+            <response code="401">If the user is not authorize or JWT token expired</response>
+        </member>
+        <member name="M:ECom.API.Controllers.OData.v2.ProductController.Get">
+            <summary>
+            Gets all Product
+            Use the GET http verb
+            Request for v2/Product
+            </summary>
+            <returns>List of Products</returns>
+        </member>
+        <member name="M:ECom.API.Controllers.OData.v2.ProductController.Get(System.Int32)">
+            <summary>
+            Gets single Product
+            Use the GET http verb
+            Request for v2/Product(3)
+            </summary>
+            <param name="key"></param>
+            <returns>Single Product</returns>
+        </member>
+        <member name="M:ECom.API.Controllers.OData.v2.ProductController.Create(ECom.Core.Entities.Product)">
+             <summary>
+             Creates a Product.
+             Use the POST http verb.
+             Request for v2/product
+             Set Content-Type:Application/Json
+             </summary>
+             <remarks>
+             Sample request:
+            
+                 POST /Product
+                 {
+                    "id": 0, To create a new product pass id as 0.
+                    "name": "Product 1 ",
+                    "producttypeid": 3
+                 }
+            
+             </remarks>
+             <param name="item"></param>
+             <returns>A newly created Product</returns>
+             <response code="201">Returns the newly created Product</response>
+             <response code="400">If the item is null</response>            
+        </member>
+        <member name="M:ECom.API.Controllers.OData.v2.ProductController.Update(System.Int32,ECom.Core.Entities.Product)">
+             <summary>
+             Update a specific Product.
+             Saves the entire Product object to the object specified by key (id). Is supposed to overwrite all properties.
+             Use the PUT http verb
+             Request for v2/product/1 or v2/product(1)
+             Set Content-Type:Application/Json
+             </summary>
+             <remarks>
+             Sample request:
+            
+                 PUT /Product/1
+                 {
+                    "id": 1,
+                    "name": "Updated Value",
+                    
+                 }
+            
+             </remarks>
+             <param name="id"></param>
+             <param name="item"></param>
+             <returns></returns>
+        </member>
+        <member name="M:ECom.API.Controllers.OData.v2.ProductController.Delete(System.Int32)">
+            <summary>
+            Use the DELETE http verb
+            Request for v2/product(5) or  v2/product/5
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+            <summary>
+            Deletes a specific Product.
+            </summary>
+        </member>
+    </members>
+</doc>

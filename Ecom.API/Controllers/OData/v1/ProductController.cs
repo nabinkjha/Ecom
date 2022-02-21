@@ -14,6 +14,7 @@ namespace ECom.API.Controllers.OData.v1
 {
     [Produces(MediaTypeNames.Application.Json)]
     [Consumes(MediaTypeNames.Application.Json)]
+    [Route("v2/[controller]")]
     public class ProductController : ODataController
     {
         private readonly IUnitOfWork _uow;

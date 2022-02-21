@@ -11,6 +11,7 @@ using ECom.API.Controllers.OData.Login;
 
 namespace ECom.API.Controllers.OData.v2
 {
+    [Route("v2/[controller]")]
     public class ProductController : BaseODataController
     {
         private readonly IUnitOfWork _uow;
@@ -29,7 +30,7 @@ namespace ECom.API.Controllers.OData.v2
         [EnableQuery(PageSize = 10, MaxExpansionDepth = 5)]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Product>))]
         [ProducesResponseType(404)]
-        [HttpGet("v2/Product")]
+        [HttpGet(template: "v2/Product")]
         public IActionResult Get()
         {
             var items = _uow.Product.GetAll().AsQueryable();
@@ -42,7 +43,6 @@ namespace ECom.API.Controllers.OData.v2
         /// </summary>
         /// <param name="key"></param>
         /// <returns>Single Product</returns>
-        [HttpGet]
         [ProducesResponseType(200, Type = typeof(Product))]
         [ProducesResponseType(404)]
         [HttpGet("v2/Product({id})")]

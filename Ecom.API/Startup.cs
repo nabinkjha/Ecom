@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using ECom.API.Middlewares;
 
 namespace ECom.API
 {
@@ -134,26 +135,12 @@ namespace ECom.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseExceptionHandlerMiddleware();
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();
             app.UseAuthentication();
-            // a test middleware
-            app.Use(next => context =>
-            {
-                var endpoint = context.GetEndpoint();
-                if (endpoint == null)
-                {
-                    return next(context);
-                }
-                IEnumerable templates;
-                IODataRoutingMetadata metadata = endpoint.Metadata.GetMetadata<IODataRoutingMetadata>();
-                if (metadata != null)
-                {
-                    templates = metadata.Template.GetTemplates();
-                }
-                return next(context); 
-            });
+          
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
