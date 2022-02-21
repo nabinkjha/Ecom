@@ -20,6 +20,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using ECom.API.Middlewares;
+using ECom.API.Extensions;
 
 namespace ECom.API
 {
@@ -35,6 +37,7 @@ namespace ECom.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<HandleExceptionMiddleware>();
             services.AddDbContext<DatabaseContext>((builder) =>
             {
                 builder.UseSqlite(
@@ -134,6 +137,7 @@ namespace ECom.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.ConfigureExceptionHandler(env);
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();
