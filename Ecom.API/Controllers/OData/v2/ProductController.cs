@@ -42,7 +42,6 @@ namespace ECom.API.Controllers.OData.v2
         /// </summary>
         /// <param name="key"></param>
         /// <returns>Single Product</returns>
-        [HttpGet]
         [ProducesResponseType(200, Type = typeof(Product))]
         [ProducesResponseType(404)]
         [HttpGet("v2/Product({id})")]

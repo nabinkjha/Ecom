@@ -1,4 +1,6 @@
 ﻿using ECom.API.Utilities;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -8,25 +10,27 @@ using System.Threading.Tasks;
 
 namespace ECom.API.Middlewares
 {
-    public class HandleExceptionMiddleware : IMiddleware
+    // You may need to install the Microsoft.AspNetCore.Http.Abstractions package into your project
+    public class ExceptionHandlerMiddleware
     {
-        private readonly RequestDelegate next;
-        private readonly ILogger<HandleExceptionMiddleware> logger;
+        private readonly RequestDelegate _next;
+        private readonly ILogger<ExceptionHandlerMiddleware> logger;
         private readonly IHostEnvironment env;
 
-        public HandleExceptionMiddleware(RequestDelegate next,
-            ILogger<HandleExceptionMiddleware> logger,
+        public ExceptionHandlerMiddleware(RequestDelegate next,ILogger<ExceptionHandlerMiddleware> logger,
             IHostEnvironment env)
         {
-            this.next = next;
+            this._next = next;
             this.logger = logger;
             this.env = env;
         }
-        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+        
+
+        public async Task Invoke(HttpContext httpContext)
         {
             try
             {
-                await next(context);
+                await _next(httpContext);
             }
             catch (Exception ex)
             {
@@ -47,12 +51,20 @@ namespace ECom.API.Middlewares
                 {
                     exceptionResponse = new ApiException((int)statusCode, errorMessage);
                 }
-
                 logger.LogError(ex, ex.Message);
-                context.Response.StatusCode = (int)statusCode;
-                context.Response.ContentType = "application/json";
-                await context.Response.WriteAsync(exceptionResponse.ToString());
+                httpContext.Response.StatusCode = (int)statusCode;
+                httpContext.Response.ContentType = "application/json";
+                await httpContext.Response.WriteAsync(exceptionResponse.ToString());
             }
+        }
+    }
+
+    // Extension method used to add the middleware to the HTTP request pipeline.
+    public static class ExceptionHandlerExtensions
+    {
+        public static IApplicationBuilder UseExceptionHandlerMiddleware(this IApplicationBuilder builder)
+        {
+            return builder.UseMiddleware<ExceptionHandlerMiddleware>();
         }
     }
 }
