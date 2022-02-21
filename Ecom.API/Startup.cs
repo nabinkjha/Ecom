@@ -140,22 +140,7 @@ namespace ECom.API
             app.UseRouting();
             app.UseAuthorization();
             app.UseAuthentication();
-            // a test middleware
-            app.Use(next => context =>
-            {
-                var endpoint = context.GetEndpoint();
-                if (endpoint == null)
-                {
-                    return next(context);
-                }
-                IEnumerable templates;
-                IODataRoutingMetadata metadata = endpoint.Metadata.GetMetadata<IODataRoutingMetadata>();
-                if (metadata != null)
-                {
-                    templates = metadata.Template.GetTemplates();
-                }
-                return next(context); 
-            });
+          
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
