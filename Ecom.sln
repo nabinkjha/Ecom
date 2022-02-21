@@ -13,6 +13,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solution items", "solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECom.Web", "ECom.Web\ECom.Web.csproj", "{2C5CEE63-C787-4565-B881-0DFB2C72F125}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataTable", "DataTable\DataTable.csproj", "{307C8E6C-F6FF-45ED-BE46-8618E1C81658}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{33ABA611-4CF9-4E0C-A8AB-FDC54DBF6262}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{33ABA611-4CF9-4E0C-A8AB-FDC54DBF6262}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{33ABA611-4CF9-4E0C-A8AB-FDC54DBF6262}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C5CEE63-C787-4565-B881-0DFB2C72F125}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C5CEE63-C787-4565-B881-0DFB2C72F125}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C5CEE63-C787-4565-B881-0DFB2C72F125}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C5CEE63-C787-4565-B881-0DFB2C72F125}.Release|Any CPU.Build.0 = Release|Any CPU
+		{307C8E6C-F6FF-45ED-BE46-8618E1C81658}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{307C8E6C-F6FF-45ED-BE46-8618E1C81658}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{307C8E6C-F6FF-45ED-BE46-8618E1C81658}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{307C8E6C-F6FF-45ED-BE46-8618E1C81658}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -19,6 +19,7 @@ using ECom.API.Utilities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace ECom.API
 {
@@ -45,7 +46,7 @@ namespace ECom.API
             opt.Select().Filter().Count().OrderBy().Expand().SetMaxTop(100)
             .AddRouteComponents("v1", EdmModelBuilder.Build("v1"))
             .AddRouteComponents("v2", EdmModelBuilder.Build("v2"))
-            );
+            ).AddNewtonsoftJson();
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddMvc(c => c.Conventions.Add(new GroupControllerByVersion()));// decorate Controllers to distinguish SwaggerDoc (v1, v2, etc.)
             services.AddSwaggerGen(c =>
@@ -104,7 +105,11 @@ namespace ECom.API
                 // Uses full schema names to avoid v1/v2/v3 schema collisions
                 // see: https://github.com/domaindrivendev/Swashbuckle/issues/442
                 c.CustomSchemaIds(x => x.FullName);
-            });
+                c.CustomOperationIds(apiDescription =>
+                {
+                    return apiDescription.TryGetMethodInfo(out MethodInfo methodInfo) ? methodInfo.Name : null;
+                });
+            }).AddSwaggerGenNewtonsoftSupport();
 
             services.AddAuthentication(option =>
             {

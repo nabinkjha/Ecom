@@ -11,7 +11,6 @@ using ECom.API.Controllers.OData.Login;
 
 namespace ECom.API.Controllers.OData.v2
 {
-    [Produces("application/json")]
     public class ProductController : BaseODataController
     {
         private readonly IUnitOfWork _uow;
