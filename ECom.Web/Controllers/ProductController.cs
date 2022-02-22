@@ -36,6 +36,7 @@ namespace ECom.Web.Controllers
         private async Task<ApplicationLoginViewModel> GetTokenToAccessOdataAPI()
         {
             var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Add("api-key", "12345abecdf516d0f6472d5199999");
             var result = await httpClient.PostAsJsonAsync("https://localhost:44311/v2/Authenticate", new
             {
                 UserName = "odata",
