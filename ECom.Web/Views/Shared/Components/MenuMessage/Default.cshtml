@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Message>
+<li class="nav-item dropdown">
+    <!-- Menu toggle button -->
+    <a class="nav-link" data-toggle="dropdown" href="#">
+        <i class="far fa-comments"></i>
+        <span class="badge badge-danger navbar-badge">@Model.Count()</span>
+    </a>
+    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+
+        <!-- inner menu: contains the messages -->
+        @foreach (var message in Model)
+        {
+        <a href="#" class="dropdown-item">
+            <!-- start message -->
+            <div class="media">
+                
+                    
+                    <!-- User Image -->
+                    <img src="@message.AvatarURL" alt="user Avatar" class="img-size-50 mr-3 img-circle">
+                    <div class="media-body">
+                        <!-- Message title and timestamp -->
+                        <h3 class="dropdown-item-title">
+                            @message.DisplayName
+                            <span class="float-right text-sm text-danger"><i class="fa fa-star"></i></span>
+                        </h3>
+                        <!-- The message -->
+                        <p class="text-sm">@message.ShortDesc</p>
+                        <p class="text-sm text-muted"><i class="fa fa-clock-o mr-1"></i>@message.TimeSpan</p>
+                    </div>
+                    </div>
+        </a>
+        }
+                <!-- end message -->
+                <!-- /.menu -->
+            
+    <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+    </div>
+</li>
