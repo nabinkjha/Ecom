@@ -12,10 +12,10 @@ namespace ECom.Web.Common
         public enum Module
         {
             Home,
-            About,
-            Contact,
-            Error,
-            Login,
+            Product,
+            ProductCategory,
+            Order,
+            User,
             Register,
             SuperAdmin,
             Role,
@@ -59,13 +59,22 @@ namespace ECom.Web.Common
                         URLPath = "/",
                         LinkCounter = counter,
                     };
-                case Module.Login:
+                case Module.Product:
                     return new SidebarMenu
                     {
                         Type = SidebarMenuType.Link,
-                        Name = "Login",
+                        Name = "Product",
                         IconClassName = "fa fa-sign-in-alt",
-                        URLPath = "/Account/Login",
+                        URLPath = "/Product",
+                        LinkCounter = counter,
+                    };
+                case Module.ProductCategory:
+                    return new SidebarMenu
+                    {
+                        Type = SidebarMenuType.Link,
+                        Name = "ProductCategory",
+                        IconClassName = "fa fa-users",
+                        URLPath = "/ProductCategory",
                         LinkCounter = counter,
                     };
                 case Module.Register:
@@ -77,16 +86,8 @@ namespace ECom.Web.Common
                         URLPath = "/Account/Register",
                         LinkCounter = counter,
                     };
-                case Module.About:
-                    return new SidebarMenu
-                    {
-                        Type = SidebarMenuType.Link,
-                        Name = "About",
-                        IconClassName = "fa fa-users",
-                        URLPath = "/Home/About",
-                        LinkCounter = counter,
-                    };
-                case Module.Contact:
+             
+                case Module.User:
                     return new SidebarMenu
                     {
                         Type = SidebarMenuType.Link,
@@ -95,15 +96,15 @@ namespace ECom.Web.Common
                         URLPath = "/Home/Contact",
                         LinkCounter = counter,
                     };
-                case Module.Error:
-                    return new SidebarMenu
-                    {
-                        Type = SidebarMenuType.Link,
-                        Name = "Error",
-                        IconClassName = "fa fa-exclamation-triangle",
-                        URLPath = "/Home/Error",
-                        LinkCounter = counter,
-                    };
+                //case Module.Error:
+                //    return new SidebarMenu
+                //    {
+                //        Type = SidebarMenuType.Link,
+                //        Name = "Error",
+                //        IconClassName = "fa fa-exclamation-triangle",
+                //        URLPath = "/Home/Error",
+                //        LinkCounter = counter,
+                //    };
                 case Module.SuperAdmin:
                     return new SidebarMenu
                     {
