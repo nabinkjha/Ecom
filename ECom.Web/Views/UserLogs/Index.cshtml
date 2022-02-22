@@ -1,0 +1,63 @@
+﻿<link rel="stylesheet" href="~/lib/datatables/css/dataTables.bootstrap4.min.css" asp-append-version="true" />
+<script src="~/lib/datatables/js/jquery.dataTables.min.js" asp-append-version="true"></script>
+<script src="~/lib/datatables/js/dataTables.bootstrap4.min.js" asp-append-version="true"></script>
+
+@model System.Collections.Generic.IEnumerable<ECom.Web.Models.UserAudit>
+
+@{
+    ViewData["Title"] = "User Logs";
+}
+
+<h2>@ViewData["Title"].</h2>
+
+<br>
+<table class="table" id="myTable">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.UserAuditId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Timestamp)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AuditEvent)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IpAddress)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserAuditId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Timestamp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AuditEvent)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IpAddress)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable({
+            "lengthMenu": [[50, 75, 150, -1], [50, 75, 150, "All"]]
+        });
+    });
+</script>

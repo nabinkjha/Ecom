@@ -3,8 +3,59 @@
   "defaultProvider": "cdnjs",
   "libraries": [
     {
+      "library": "twitter-bootstrap@4.6.0",
+      "destination": "wwwroot/lib/bootstrap/"
+    },
+    {
+      "library": "jquery@3.6.0",
+      "destination": "wwwroot/lib/jquery/"
+    },
+    {
+      "library": "jquery-validate@1.19.0",
+      "destination": "wwwroot/lib/jquery-validation/"
+    },
+    {
+      "library": "jquery-validation-unobtrusive@3.2.11",
+      "destination": "wwwroot/lib/jquery-validation-unobtrusive/"
+    },
+    {
       "library": "datatables@1.10.21",
-      "destination": "wwwroot/datatables/"
+      "destination": "wwwroot/lib/datatables/"
+    },
+    {
+      "library": "ionicons@4.5.5",
+      "destination": "wwwroot/lib/ionicons/"
+    },
+    {
+      "library": "pace@1.0.2",
+      "destination": "wwwroot/lib/pace/"
+    },
+    {
+      "library": "fastclick@1.0.6",
+      "destination": "wwwroot/lib/fastclick/"
+    },
+    {
+      "library": "font-awesome@5.15.3",
+      "destination": "wwwroot/lib/font-awesome/"
+    },
+    {
+      "library": "icheck-bootstrap@3.0.1",
+      "destination": "wwwroot/lib/icheck-bootstrap/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "admin-lte@3.1.0",
+      "destination": "wwwroot/lib/admin-lte/",
+      "files": [
+        "dist/css/adminlte.css",
+        "dist/css/adminlte.css.map",
+        "dist/css/adminlte.min.css",
+        "dist/js/adminlte.js",
+        "dist/js/adminlte.js.map",
+        "dist/js/adminlte.min.js",
+        "dist/js/adminlte.min.js.map",
+        "dist/img/AdminLTELogo.png"
+      ]
     }
   ]
 }
