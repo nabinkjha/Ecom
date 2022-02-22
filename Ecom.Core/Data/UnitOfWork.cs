@@ -10,7 +10,7 @@ namespace ECom.Core.Data.Repositories
         {
             _context = context;
         }
-
+        public IApiClientRepository ApiClient => new ApiClientRepository(_context);
         public IProductRepository Product => new ProductRepository(_context);
 
         public IProductCategoryRepository ProductCategory => new ProductCategoryRepository(_context);

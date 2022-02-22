@@ -53,6 +53,7 @@ namespace ECom.Web.Controllers
             clientSettings.BeforeRequest += delegate (HttpRequestMessage message)
             {
                 message.Headers.Add("Authorization", "Bearer " + accessToken);
+                message.Headers.Add("api-key", "12345abecdf516d0f6472d5199999");
             };
             return clientSettings;
         }

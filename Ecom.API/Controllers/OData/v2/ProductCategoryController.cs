@@ -9,7 +9,6 @@ using ECom.API.Controllers.OData.Login;
 
 namespace ECom.API.Controllers.OData.v2
 {
-    [Route("v2/[controller]")]
     public class ProductCategoryController : BaseODataController
     {
         private readonly IUnitOfWork _uow;

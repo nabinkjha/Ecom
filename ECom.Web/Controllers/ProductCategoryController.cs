@@ -83,6 +83,7 @@ namespace ECom.Web.Controllers
                 baseURL += $"&$filter=contains(Name,'{searchText}')";
             }
             var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Add("api-key", "12345abecdf516d0f6472d5199999");
             var result = await httpClient.GetStringAsync(baseURL);
             result = result.Replace("@odata.context", "odatacontext").Replace("@odata.count", "odatacount");
             var products = JsonSerializer.Deserialize<ProductSearchResult>(result, _options);

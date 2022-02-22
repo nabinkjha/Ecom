@@ -2,6 +2,8 @@
 using ECom.Contracts.Data.Repositories;
 using System.Collections.Generic;
 using System.Linq;
+using System;
+using System.Linq.Expressions;
 
 namespace ECom.Core.Data.Repositories
 {
@@ -49,7 +51,10 @@ namespace ECom.Core.Data.Repositories
         {
             return _dbSet.AsEnumerable();
         }
-
+        public IEnumerable<T> Where(Func<T,bool> condition)
+        {
+            return _dbSet.Where(condition);
+        }
         public void Update(T entity)
         {
             _dbSet.Attach(entity);

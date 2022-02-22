@@ -10,6 +10,7 @@ namespace ECom.Core.Data
         {
             _options = options;
         }
+        public DbSet<ApiClient> ApiClients { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductCategory> ProductCategory { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
