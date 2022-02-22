@@ -26,13 +26,13 @@ namespace ECom.Web.ViewComponents
 
             sidebars.Add(ModuleHelper.AddHeader("MAIN NAVIGATION"));
             sidebars.Add(ModuleHelper.AddModule(ModuleHelper.Module.Home));
-            sidebars.Add(ModuleHelper.AddModule(ModuleHelper.Module.Error, Tuple.Create(0, 0, 1)));
-            sidebars.Add(ModuleHelper.AddModule(ModuleHelper.Module.About, Tuple.Create(0, 1, 0)));
-            sidebars.Add(ModuleHelper.AddModule(ModuleHelper.Module.Contact, Tuple.Create(1, 0, 0)));
+            sidebars.Add(ModuleHelper.AddModule(ModuleHelper.Module.Product, Tuple.Create(0, 0, 1)));
+            sidebars.Add(ModuleHelper.AddModule(ModuleHelper.Module.ProductCategory, Tuple.Create(0, 1, 0)));
+            sidebars.Add(ModuleHelper.AddModule(ModuleHelper.Module.User, Tuple.Create(1, 0, 0)));
             sidebars.Add(ModuleHelper.AddTree("Account"));
             sidebars.Last().TreeChild = new List<SidebarMenu>()
             {
-                ModuleHelper.AddModule(ModuleHelper.Module.Login),
+                //ModuleHelper.AddModule(ModuleHelper.Module.Login),
                 ModuleHelper.AddModule(ModuleHelper.Module.Register, Tuple.Create(1, 1, 1)),
             };
 
