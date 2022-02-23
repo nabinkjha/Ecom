@@ -21,6 +21,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using ECom.API.Middlewares;
+using ECom.API.Data;
 
 namespace ECom.API
 {
@@ -53,6 +54,7 @@ namespace ECom.API
             services.AddSwaggerGen(c =>
             {
                 c.DocumentFilter<CustomSwaggerFilter>();
+                c.OperationFilter<CustomHeaderFilter>();
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
@@ -136,6 +138,7 @@ namespace ECom.API
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseExceptionHandlerMiddleware();
+            app.UseApiKeyValidatorsMiddleware();
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();
@@ -155,5 +158,6 @@ namespace ECom.API
                 endpoints.MapControllers();
             });
         }
+        
     }
 }

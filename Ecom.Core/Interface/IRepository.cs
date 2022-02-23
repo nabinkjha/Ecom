@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ECom.Contracts.Data.Repositories
 {
@@ -10,5 +11,6 @@ namespace ECom.Contracts.Data.Repositories
         void Update(T entity);
         void Delete(object id);
         int Count();
+        IEnumerable<T> Where(Func<T, bool> condition);
     }
 }
