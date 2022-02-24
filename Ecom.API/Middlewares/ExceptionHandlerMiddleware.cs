@@ -1,4 +1,5 @@
 ﻿using ECom.API.Utilities;
+using ECom.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -42,6 +43,16 @@ namespace ECom.API.Middlewares
                 {
                     statusCode = HttpStatusCode.Unauthorized;
                     errorMessage = "Unauthorize access";
+                }
+                else if (exceptionType == typeof(MissingApiKeyException))
+                {
+                    statusCode = HttpStatusCode.Unauthorized;
+                    errorMessage = ex.Message;
+                }
+                else if (exceptionType == typeof(InvalidApiKeyException))
+                {
+                    statusCode = HttpStatusCode.Unauthorized;
+                    errorMessage = ex.Message;
                 }
                 if (env.IsDevelopment())
                 {
