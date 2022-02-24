@@ -21,8 +21,8 @@ namespace DataTable
                    ? (columns[order[0].Column].Data + " " + order[0].dir)
                    : null;
 
-        public int RecordsFiltered { get; set; }
-        public int RecordsTotal { get; set; }
+        public long RecordsFiltered { get; set; }
+        public long RecordsTotal { get; set; }
         public List<T> Data { get; set; }
 
     }

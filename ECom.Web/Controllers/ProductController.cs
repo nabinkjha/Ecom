@@ -1,63 +1,167 @@
 ﻿using ECom.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Simple.OData.Client;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Json;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using WebApp.RESTClients;
 
 namespace ECom.Web.Controllers
 {
     public class ProductController : Controller
     {
         private readonly ILogger<ProductController> _logger;
-        private readonly JsonSerializerOptions _options;
-        public ProductController(ILogger<ProductController> logger)
+        public IProductHttpClient _productHttpClient;
+
+        public ProductController(ILogger<ProductController> logger,IProductHttpClient productHttpClient)
         {
             _logger = logger;
-            _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            _productHttpClient = productHttpClient;
         }
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var user = await GetTokenToAccessOdataAPI();
-            var setting = GetSettingWithToken("https://localhost:44311/v2/", user.Token);
-            var client = new ODataClient(setting);
-            var products = await client.For<Product>()// Name of the entity must match the API endpoint controller name
-                   .Select(x=> (new { x.Id , x.Name,x.SKU,x.Slug, x.ProductCategory}))
-                   .Expand(p => p.ProductCategory)
-                   .Top(10).Skip(100)
-                   .FindEntriesAsync();
-            return View(products);
+            return View();
         }
+       
+        [HttpPost]
+        public async Task<JsonResult> GetProductList([FromBody] ProductSearchParameter param)
+        {
+            var helper = await _productHttpClient.GetSearchResult(param);
+            return Json(helper);
+        }
+    
 
-        private async Task<ApplicationLoginViewModel> GetTokenToAccessOdataAPI()
-        {
-            var httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Add("api-key", "12345abecdf516d0f6472d5199999");
-            var result = await httpClient.PostAsJsonAsync("https://localhost:44311/v2/Authenticate", new
-            {
-                UserName = "odata",
-                Password = "odata123"
-            }, _options);
-            result.EnsureSuccessStatusCode();
-            var content = await result.Content.ReadAsStringAsync();
-            var user = JsonSerializer.Deserialize<ApplicationLoginViewModel>(content);
-            return user;
-        }
+        //// GET: Products/Details/5
+        //public async Task<IActionResult> Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-        private ODataClientSettings GetSettingWithToken(string url, string accessToken)
-        {
-            var clientSettings = new ODataClientSettings(new Uri(url));
-            clientSettings.BeforeRequest += delegate (HttpRequestMessage message)
-            {
-                message.Headers.Add("Authorization", "Bearer " + accessToken);
-                message.Headers.Add("api-key", "12345abecdf516d0f6472d5199999");
-            };
-            return clientSettings;
-        }
+        //    var product = await _context.Product
+        //        .Include(p => p.ProductCategory)
+        //        .FirstOrDefaultAsync(m => m.Id == id);
+        //    if (product == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return View(product);
+        //}
+
+        //// GET: Products/Create
+        //public IActionResult Create()
+        //{
+        //    ViewData["ProductCategoryId"] = new SelectList(_context.Set<ProductCategory>(), "Id", "Id");
+        //    return View();
+        //}
+
+        //// POST: Products/Create
+        //// To protect from overposting attacks, enable the specific properties you want to bind to.
+        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create([Bind("Id,Name,SKU,Slug,IsFeatured,ImageUrl,CreatedDate,Description,Price,Rating,Brand,ReviewCount,StockCount,ProductCategoryId")] Product product)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _context.Add(product);
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    ViewData["ProductCategoryId"] = new SelectList(_context.Set<ProductCategory>(), "Id", "Id", product.ProductCategoryId);
+        //    return View(product);
+        //}
+
+        //// GET: Products/Edit/5
+        //public async Task<IActionResult> Edit(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var product = await _context.Product.FindAsync(id);
+        //    if (product == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    ViewData["ProductCategoryId"] = new SelectList(_context.Set<ProductCategory>(), "Id", "Id", product.ProductCategoryId);
+        //    return View(product);
+        //}
+
+        //// POST: Products/Edit/5
+        //// To protect from overposting attacks, enable the specific properties you want to bind to.
+        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Edit(int id, [Bind("Id,Name,SKU,Slug,IsFeatured,ImageUrl,CreatedDate,Description,Price,Rating,Brand,ReviewCount,StockCount,ProductCategoryId")] Product product)
+        //{
+        //    if (id != product.Id)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+        //            _context.Update(product);
+        //            await _context.SaveChangesAsync();
+        //        }
+        //        catch (DbUpdateConcurrencyException)
+        //        {
+        //            if (!ProductExists(product.Id))
+        //            {
+        //                return NotFound();
+        //            }
+        //            else
+        //            {
+        //                throw;
+        //            }
+        //        }
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    ViewData["ProductCategoryId"] = new SelectList(_context.Set<ProductCategory>(), "Id", "Id", product.ProductCategoryId);
+        //    return View(product);
+        //}
+
+        //// GET: Products/Delete/5
+        //public async Task<IActionResult> Delete(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var product = await _context.Product
+        //        .Include(p => p.ProductCategory)
+        //        .FirstOrDefaultAsync(m => m.Id == id);
+        //    if (product == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return View(product);
+        //}
+
+        //// POST: Products/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> DeleteConfirmed(int id)
+        //{
+        //    var product = await _context.Product.FindAsync(id);
+        //    _context.Product.Remove(product);
+        //    await _context.SaveChangesAsync();
+        //    return RedirectToAction(nameof(Index));
+        //}
+
+        //private bool ProductExists(int id)
+        //{
+        //    return _context.Product.Any(e => e.Id == id);
+        //}
+      
     }
-  
+
 }

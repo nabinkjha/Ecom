@@ -1,4 +1,6 @@
-﻿using ECom.Web.Data;
+﻿using ECom.Web.Common;
+using ECom.Web.Data;
+using ECom.Web.Extensions;
 using ECom.Web.Models;
 using ECom.Web.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -14,6 +16,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Polly;
+using Polly.Extensions.Http;
+using System;
+using System.Net.Http;
+using WebApp.RESTClients;
 
 namespace AdminLTE
 {
@@ -48,12 +55,17 @@ namespace AdminLTE
             {
                 builder.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
             });
+            services.Configure<ApplicationParameters>(
+              this.Configuration.GetSection("ApplicationParameters"));
+
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
             services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, AppClaimsPrincipalFactory>();
             services.AddScoped<SignInManager<ApplicationUser>, AuditableSignInManager<ApplicationUser>>();
+            
+            services.AddPollyPolicies();
 
             var mvcBuilder = services.AddMvc(config =>
             {
@@ -76,14 +88,13 @@ namespace AdminLTE
 
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
         }
-
+     
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
                 app.UseBrowserLink();
             }
             else

@@ -1,61 +1,89 @@
-﻿@model IEnumerable<ECom.Web.Models.Product>
-
+﻿
 @{
-    ViewData["Title"] = "View";
+    ViewData["Title"] = "Product Category";
 }
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" />
+<div class="text-center">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="productTableId" class="table table-bordered" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>SKU</th>
+                                <th>slug</th>
+                                <th>Name</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-<h1>View</h1>
+@section Scripts{
+    <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+    <script>
+        var baseUrl = "@Url.Content("~/")";
+        $(function () {
+            loadProduct();
+            $(document).keypress(function (e) {
+                if (e.which == 13) {
+                   loadProduct();
+                }
+            });
+        })
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SKU)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Slug)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsFeatured)
-            </th>
-           
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SKU)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Slug)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsFeatured)
-            </td>
-            
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
+        function loadProduct() {
+            $('#productTableId').dataTable().fnDestroy();
+            $('#productTableId').DataTable({
+                searchDelay: 500,
+                "processing": true,
+                "serverSide": true,
+                "filter": true,
+                "ordering": true,
+                "deferRender": true,
+                "drawCallback": function () {
+                    $("#dataTable_wrapper").children().eq(1).css("overflow", "auto");
+                },
+                //"ajax": baseUrl +"sample.json",
+                "ajax": {
+                    "type": "POST",
+                    "url": baseUrl + "Product/GetProductList",
+                    "datatype": "json",
+                    "contentType": "application/json; charset=utf-8",
+                    //"headers": { 'RequestVerificationToken': $('#__RequestVerificationToken').val() },
+                    "data": function (data) {
+                        return JSON.stringify(data);
+                    }
+                },
+                "columnDefs": [{
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                },
+                {
+                    "targets": 4,
+                    "data": "edit_link",
+                    "render": function (data, type, row, meta) {
+                        return "<button type='button' class='btn btn-primary mr-1' onclick=EditProduct('" + row.id + "'); >Edit</button><button type='button' class='btn btn-danger' onclick=DeleteProduct('" + row.id + "'); >Delete</button>";
+                    }
+                }
+                ],
+                "columns": [
+                    { "data": "id", "name": "Id", "autoWidth": true },
+                    { "data": "sku", "name": "SKU", "autoWidth": true },
+                    { "data": "slug", "name": "Slug", "autoWidth": true },
+                    { "data": "name", "name": "Name", "autoWidth": true },
+                ],
+                "dom": "<'row'<'col-sm-6'l><'col-sm-6'<'#buttonContainer.site-datatable-button-container'>f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                "order": [1, "desc"]
+            });
+            $("#buttonContainer").addClass("float-right").append("<button class='btn btn-sm bg-success'>Create</button>");
+        }
+    </script>
 }
-    </tbody>
-</table>
