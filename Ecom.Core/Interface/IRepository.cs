@@ -1,16 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace ECom.Contracts.Data.Repositories
 {
     public interface IRepository<T>
     {
-        IEnumerable<T> GetAll();
+        IQueryable<T> GetAll();
         T Get(object id);
         void Add(T entity);
         void Update(T entity);
         void Delete(object id);
         int Count();
-        IEnumerable<T> Where(Func<T, bool> condition);
+        IQueryable<T> FindByCondition(Expression<Func<T, bool>> condition);
     }
 }

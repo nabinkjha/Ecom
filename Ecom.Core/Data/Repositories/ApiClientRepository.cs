@@ -12,7 +12,7 @@ namespace ECom.Core.Data.Repositories
 
         public bool CheckValidApiKey(string apiKey)
         {
-            var result = Where(x => x.Key == apiKey && !x.IsBlocked).ToList();
+            var result = FindByCondition(x => x.Key == apiKey && !x.IsBlocked).ToList();
             return result.Count > 0;
         }
     }

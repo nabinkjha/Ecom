@@ -6,9 +6,8 @@ using System.Linq;
 using Microsoft.AspNetCore.Http;
 using ECom.Core.Entities;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.OData.Deltas;
-using Microsoft.AspNetCore.JsonPatch;
 using System.Net.Mime;
+using System.Threading.Tasks;
 
 namespace ECom.API.Controllers.OData.v1
 {
@@ -82,7 +81,7 @@ namespace ECom.API.Controllers.OData.v1
         [HttpPost("v1/Product")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Create(Product item)
+        public async Task<IActionResult> Create(Product item)
         {
             if (item == null)
             {
@@ -93,7 +92,7 @@ namespace ECom.API.Controllers.OData.v1
                 return BadRequest(ModelState);
             }
             _uow.Product.Add(item);
-            _uow.Commit();
+            await _uow.Commit();
             return Ok(item);
         }
         /// <summary>
@@ -119,10 +118,9 @@ namespace ECom.API.Controllers.OData.v1
         /// <returns></returns>
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
-        [HttpPut("v1/Product")]
         [HttpPut("v1/Product({id})")]
         [HttpPut("v1/Product/{id}")]
-        public IActionResult Update(int id, Product item)
+        public async Task<IActionResult> Update(int id, Product item)
         {
             if (item == null || item.Id != id)
             {
@@ -135,32 +133,10 @@ namespace ECom.API.Controllers.OData.v1
             }
             product.Name = item.Name;
             _uow.Product.Update(product);
-            _uow.Commit();
+            await _uow.Commit();
             return NoContent();
         }
-        [HttpPatch("{id}")]
-        public IActionResult Patch(int id, JsonPatchDocument<Product> product)
-        {
-            if (product != null)
-            {
-                var original = _uow.Product.Get(id);
-                if (original == null)
-                {
-                    return NotFound($"Not found product with id = {id}");
-                }
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-                product.ApplyTo(original, ModelState);
-                _uow.Commit();
-                return Updated(original);
-            }
-            else
-            {
-                return BadRequest(ModelState);
-            }
-        }
+        
         /// <summary>
         /// Use the DELETE http verb
         /// Request for v1/product(5) or v1/product/5
@@ -174,7 +150,7 @@ namespace ECom.API.Controllers.OData.v1
         [ProducesResponseType(404)]
         [HttpDelete("v1/Product({id})")]
         [HttpDelete("v1/Product/{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var item = _uow.Product.Get(id);
             if (item == null)
@@ -182,7 +158,7 @@ namespace ECom.API.Controllers.OData.v1
                 return NotFound();
             }
             _uow.Product.Delete(item.Id);
-            _uow.Commit();
+            await _uow.Commit();
             return NoContent();
         }
     }

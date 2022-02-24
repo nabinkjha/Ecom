@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ECom.Contracts.Data.Repositories;
-using System.Collections.Generic;
 using System.Linq;
 using System;
 using System.Linq.Expressions;
@@ -47,13 +46,13 @@ namespace ECom.Core.Data.Repositories
             return x;
         }
 
-        public IEnumerable<T> GetAll()
+        public IQueryable<T> GetAll()
         {
-            return _dbSet.AsEnumerable();
+            return _dbSet.AsNoTracking();
         }
-        public IEnumerable<T> Where(Func<T,bool> condition)
+        public IQueryable<T> FindByCondition(Expression<Func<T, bool>> condition)
         {
-            return _dbSet.Where(condition);
+            return _dbSet.Where(condition).AsNoTracking();
         }
         public void Update(T entity)
         {

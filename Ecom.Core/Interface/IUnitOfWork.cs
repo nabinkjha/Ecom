@@ -1,4 +1,6 @@
 ﻿
+using System.Threading.Tasks;
+
 namespace ECom.Contracts.Data.Repositories
 {
     public interface IUnitOfWork
@@ -6,6 +8,6 @@ namespace ECom.Contracts.Data.Repositories
         IApiClientRepository ApiClient { get; }
         IProductRepository Product { get; }
         IProductCategoryRepository ProductCategory { get; }
-        void Commit();
+        Task<int> Commit();
     }
 }
