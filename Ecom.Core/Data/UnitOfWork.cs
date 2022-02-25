@@ -1,4 +1,5 @@
 ﻿using ECom.Contracts.Data.Repositories;
+using System.Threading.Tasks;
 
 namespace ECom.Core.Data.Repositories
 {
@@ -15,9 +16,9 @@ namespace ECom.Core.Data.Repositories
 
         public IProductCategoryRepository ProductCategory => new ProductCategoryRepository(_context);
 
-        public void Commit()
+        public async Task<int> Commit()
         {
-            _context.SaveChanges();
+            return await _context.SaveChangesAsync();
         }
     }
 }

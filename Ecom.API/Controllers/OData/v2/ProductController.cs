@@ -8,9 +8,11 @@ using ECom.Core.Entities;
 using Microsoft.AspNetCore.OData.Formatter;
 using System.Collections.Generic;
 using ECom.API.Controllers.OData.Login;
+using System.Threading.Tasks;
 
 namespace ECom.API.Controllers.OData.v2
 {
+    [Route("v2/[controller]")]
     public class ProductController : BaseODataController
     {
         private readonly IUnitOfWork _uow;
@@ -29,7 +31,7 @@ namespace ECom.API.Controllers.OData.v2
         [EnableQuery(PageSize = 10, MaxExpansionDepth = 5)]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Product>))]
         [ProducesResponseType(404)]
-        [HttpGet("v2/Product")]
+        [HttpGet(template: "v2/Product")]
         public IActionResult Get()
         {
             var items = _uow.Product.GetAll().AsQueryable();
@@ -79,7 +81,7 @@ namespace ECom.API.Controllers.OData.v2
         [HttpPost("v2/Product")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Create([FromBody] Product item)
+        public async Task<IActionResult> Create([FromBody] Product item)
         {
             if (item == null)
             {
@@ -90,7 +92,7 @@ namespace ECom.API.Controllers.OData.v2
                 return BadRequest(ModelState);
             }
             _uow.Product.Add(item);
-            _uow.Commit();
+            await _uow.Commit();
             return Ok(item);
         }
         /// <summary>
@@ -118,7 +120,7 @@ namespace ECom.API.Controllers.OData.v2
         [ProducesResponseType(404)]
         [HttpPut("v2/Product({id})")]
         [HttpPut("v2/Product/{id}")]
-        public IActionResult Update(int id, Product item)
+        public async Task<IActionResult> Update(int id, Product item)
         {
             if (item == null || item.Id != id)
             {
@@ -131,7 +133,7 @@ namespace ECom.API.Controllers.OData.v2
             }
             product.Name = item.Name;
             _uow.Product.Update(product);
-            _uow.Commit();
+            await _uow.Commit();
             return NoContent();
         }
         /// <summary>
@@ -147,7 +149,7 @@ namespace ECom.API.Controllers.OData.v2
         [ProducesResponseType(404)]
         [HttpDelete("v2/Product({id})")]
         [HttpDelete("v2/Product/{id}")]
-        public IActionResult Delete([FromODataUri] int id)
+        public async Task<IActionResult> Delete([FromODataUri] int id)
         {
             var item = _uow.Product.Get(id);
             if (item == null)
@@ -155,7 +157,7 @@ namespace ECom.API.Controllers.OData.v2
                 return NotFound();
             }
             _uow.Product.Delete(item.Id);
-            _uow.Commit();
+            await _uow.Commit();
             return NoContent();
         }
     }
