@@ -6,7 +6,6 @@ using System.Linq;
 using Microsoft.AspNetCore.Http;
 using ECom.Core.Entities;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.OData.Deltas;
 using Microsoft.AspNetCore.JsonPatch;
 using System.Net.Mime;
 
@@ -38,26 +37,26 @@ namespace ECom.API.Controllers.OData.v1
             var items = _uow.Product.GetAll().AsQueryable();
             return Ok(items);
         }
-        /// <summary>
-        /// Gets single Product
-        /// Use the GET http verb
-        /// Request for v1/Product(3)
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns>Single Product</returns>
-        [ProducesResponseType(200, Type = typeof(Product))]
-        [ProducesResponseType(404)]
-        [HttpGet("v1/Product({id})")]
-        [HttpGet("v1/Product/{id}")]
-        public IActionResult Get(int id)
-        {
-            var entity = _uow.Product.Get(id);
-            if (entity == null)
-            {
-                return NotFound();
-            }
-            return Ok(entity);
-        }
+        ///// <summary>
+        ///// Gets single Product
+        ///// Use the GET http verb
+        ///// Request for v1/Product(3)
+        ///// </summary>
+        ///// <param name="id"></param>
+        ///// <returns>Single Product</returns>
+        //[ProducesResponseType(200, Type = typeof(Product))]
+        //[ProducesResponseType(404)]
+        //[HttpGet("v1/Product({id})")]
+        //[HttpGet("v1/Product/{id}")]
+        //public IActionResult Get(int id)
+        //{
+        //    var entity = _uow.Product.Get(id);
+        //    if (entity == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return Ok(entity);
+        //}
         /// <summary>
         /// Creates a Product.
         /// Use the POST http verb.

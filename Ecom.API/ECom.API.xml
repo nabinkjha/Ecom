@@ -12,15 +12,6 @@
             </summary>
             <returns>List of ProductCategory</returns>
         </member>
-        <member name="M:ECom.API.Controllers.OData.v1.ProductCategoryController.Get(System.Int32)">
-            <summary>
-            Gets single Product
-            Use the GET http verb
-            Request for v1/ProductCategory(3)
-            </summary>
-            <param name="id"></param>
-            <returns>Single ProductCategory</returns>
-        </member>
         <member name="M:ECom.API.Controllers.OData.v1.ProductCategoryController.Create(ECom.Core.Entities.ProductCategory)">
              <summary>
              Creates a ProductCategory.

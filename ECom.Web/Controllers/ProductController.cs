@@ -1,8 +1,6 @@
 ﻿using ECom.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 using WebApp.RESTClients;
 
@@ -12,120 +10,56 @@ namespace ECom.Web.Controllers
     {
         private readonly ILogger<ProductController> _logger;
         public IProductHttpClient _productHttpClient;
-
-        public ProductController(ILogger<ProductController> logger,IProductHttpClient productHttpClient)
+        public IProductCategoryHttpClient _productCategoryHttpClient;
+        public ProductController(ILogger<ProductController> logger, IProductHttpClient productHttpClient, IProductCategoryHttpClient productCategoryHttpClient)
         {
             _logger = logger;
             _productHttpClient = productHttpClient;
+            _productCategoryHttpClient = productCategoryHttpClient;
         }
         public IActionResult Index()
         {
             return View();
         }
-       
+
         [HttpPost]
         public async Task<JsonResult> GetProductList([FromBody] ProductSearchParameter param)
         {
-            var helper = await _productHttpClient.GetSearchResult(param);
-            return Json(helper);
+            var result = await _productHttpClient.GetSearchResult(param);
+            return Json(result);
         }
-    
 
-        //// GET: Products/Details/5
-        //public async Task<IActionResult> Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        // GET: Products/Create
+        public async Task<IActionResult> Create()
+        {
+            var param = new ProductCategorySearchParameter { };
+            // var result = await _productCategoryHttpClient.GetSearchResult(param);
+            return PartialView("_Edit");
+        }
 
-        //    var product = await _context.Product
-        //        .Include(p => p.ProductCategory)
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (product == null)
-        //    {
-        //        return NotFound();
-        //    }
+        // GET: Products/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            var product = await _productHttpClient.GetById(id.Value);
+            return PartialView("_Edit", product);
+        }
 
-        //    return View(product);
-        //}
-
-        //// GET: Products/Create
-        //public IActionResult Create()
-        //{
-        //    ViewData["ProductCategoryId"] = new SelectList(_context.Set<ProductCategory>(), "Id", "Id");
-        //    return View();
-        //}
-
-        //// POST: Products/Create
-        //// To protect from overposting attacks, enable the specific properties you want to bind to.
-        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("Id,Name,SKU,Slug,IsFeatured,ImageUrl,CreatedDate,Description,Price,Rating,Brand,ReviewCount,StockCount,ProductCategoryId")] Product product)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.Add(product);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    ViewData["ProductCategoryId"] = new SelectList(_context.Set<ProductCategory>(), "Id", "Id", product.ProductCategoryId);
-        //    return View(product);
-        //}
-
-        //// GET: Products/Edit/5
-        //public async Task<IActionResult> Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var product = await _context.Product.FindAsync(id);
-        //    if (product == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    ViewData["ProductCategoryId"] = new SelectList(_context.Set<ProductCategory>(), "Id", "Id", product.ProductCategoryId);
-        //    return View(product);
-        //}
-
-        //// POST: Products/Edit/5
-        //// To protect from overposting attacks, enable the specific properties you want to bind to.
-        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, [Bind("Id,Name,SKU,Slug,IsFeatured,ImageUrl,CreatedDate,Description,Price,Rating,Brand,ReviewCount,StockCount,ProductCategoryId")] Product product)
-        //{
-        //    if (id != product.Id)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(product);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!ProductExists(product.Id))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    ViewData["ProductCategoryId"] = new SelectList(_context.Set<ProductCategory>(), "Id", "Id", product.ProductCategoryId);
-        //    return View(product);
-        //}
+        // POST: Products/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Save(int id, [Bind("Id,Name,SKU,Slug,IsFeatured,ImageUrl,CreatedDate,Description,Price,Rating,Brand,ReviewCount,StockCount,ProductCategoryId")] Product product)
+        {
+            bool success;
+            if (!ModelState.IsValid)
+            {
+                return PartialView(product);
+            }
+            product = id == 0 ? await _productHttpClient.Create(product) : await _productHttpClient.Update(product);
+            success = string.IsNullOrWhiteSpace(product.ErrorMessage);
+            return Json(new { success, message = success ? product.SuccessMessage : product.ErrorMessage });
+        }
 
         //// GET: Products/Delete/5
         //public async Task<IActionResult> Delete(int? id)
@@ -161,7 +95,7 @@ namespace ECom.Web.Controllers
         //{
         //    return _context.Product.Any(e => e.Id == id);
         //}
-      
+
     }
 
 }

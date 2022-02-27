@@ -26,8 +26,8 @@ namespace ECom.API.Controllers.OData.v1
         /// Request for v1/ProductCategory
         /// </summary>
         /// <returns>List of ProductCategory</returns>
-        [EnableQuery(PageSize = 10, MaxExpansionDepth = 5)]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<Product>))]
+        [EnableQuery]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<ProductCategory>))]
         [ProducesResponseType(404)]
         [HttpGet("v1/ProductCategory")]
         public IActionResult Get()
@@ -35,26 +35,26 @@ namespace ECom.API.Controllers.OData.v1
             var items = _uow.ProductCategory.GetAll().AsQueryable();
             return Ok(items);
         }
-        /// <summary>
-        /// Gets single Product
-        /// Use the GET http verb
-        /// Request for v1/ProductCategory(3)
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns>Single ProductCategory</returns>
-        [HttpGet("v1/ProductCategory({id})")]
-        [HttpGet("v1/ProductCategory/{id}")]
-        [ProducesResponseType(200, Type = typeof(ProductCategory))]
-        [ProducesResponseType(404)]
-        public IActionResult Get(int id)
-        {
-            var entity = _uow.ProductCategory.Get(id);
-            if (entity == null)
-            {
-                return NotFound();
-            }
-            return Ok(entity);
-        }
+        ///// <summary>
+        ///// Gets single Product
+        ///// Use the GET http verb
+        ///// Request for v1/ProductCategory(3)
+        ///// </summary>
+        ///// <param name="id"></param>
+        ///// <returns>Single ProductCategory</returns>
+        //[HttpGet("v1/ProductCategory({id})")]
+        //[HttpGet("v1/ProductCategory/{id}")]
+        //[ProducesResponseType(200, Type = typeof(ProductCategory))]
+        //[ProducesResponseType(404)]
+        //public IActionResult Get(int id)
+        //{
+        //    var entity = _uow.ProductCategory.Get(id);
+        //    if (entity == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return Ok(entity);
+        //}
 
         /// <summary>
         /// Creates a ProductCategory.

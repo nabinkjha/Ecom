@@ -1,6 +1,6 @@
-﻿
-@{
-    ViewData["Title"] = "Product Category";
+﻿@{
+    ViewData["Title"] = "Product";
+    var parentDivModel = new ModalDialogViewModel { ParentDivId = "divProduct" };
 }
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" />
 <div class="text-center">
@@ -25,8 +25,11 @@
     </div>
 </div>
 
+<partial name="ModalDialog" model="@parentDivModel" />
 @section Scripts{
     <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/site.js"></script>
+    <script src="~/js/Product/index.js"></script>
     <script>
         var baseUrl = "@Url.Content("~/")";
         $(function () {
@@ -37,7 +40,7 @@
                 }
             });
         })
-
+     
         function loadProduct() {
             $('#productTableId').dataTable().fnDestroy();
             $('#productTableId').DataTable({
@@ -70,7 +73,7 @@
                     "targets": 4,
                     "data": "edit_link",
                     "render": function (data, type, row, meta) {
-                        return "<button type='button' class='btn btn-primary mr-1' onclick=EditProduct('" + row.id + "'); >Edit</button><button type='button' class='btn btn-danger' onclick=DeleteProduct('" + row.id + "'); >Delete</button>";
+                        return "<button type='button' class='btn btn-primary mr-1' onclick=editProduct('" + row.id + "');  >Edit</button><button type='button' class='btn btn-danger' onclick=deleteProduct('" + row.id + "'); >Delete</button>";
                     }
                 }
                 ],
@@ -83,7 +86,7 @@
                 "dom": "<'row'<'col-sm-6'l><'col-sm-6'<'#buttonContainer.site-datatable-button-container'>f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
                 "order": [1, "desc"]
             });
-            $("#buttonContainer").addClass("float-right").append("<button class='btn btn-sm bg-success'>Create</button>");
+            $("#buttonContainer").addClass("float-right").append("<button class='btn btn-sm bg-success' onclick='createProduct()'>Create</button>");
         }
     </script>
 }

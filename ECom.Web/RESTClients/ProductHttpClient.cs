@@ -8,6 +8,7 @@ using System.Linq;
 using ECom.Web.RESTClients;
 using Microsoft.Extensions.Options;
 using ECom.Web.Common;
+using System.Text.Json;
 
 namespace WebApp.RESTClients
 {
@@ -51,24 +52,53 @@ namespace WebApp.RESTClients
             return result;
         }
 
-        public async Task<Product> GetProductById(int id)
+        public async Task<Product> GetById(int id)
         {
-            throw new NotImplementedException();
+            var annotations = new ODataFeedAnnotations();
+            var product = await GetProductById(id);
+          //  var product = await oDataClient.For<Product>().Filter(x => x.Id == id).FindEntryAsync(annotations);
+          //        var product = await oDataClient
+          //                       .For<Product>()
+          //.FindEntryAsync();
+            return product;
+        }
+        private async Task<Product> GetProductById(int id)
+        {
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            var baseURL = $"https://localhost:44311/v1/product?$filter=Id eq {id}";
+            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Add("api-key", "12345abecdf516d0f6472d5199999");
+            var result = await httpClient.GetStringAsync(baseURL);
+            var product = JsonSerializer.Deserialize<ProductSearchResult>(result, options);
+            return product.value.FirstOrDefault();
+        }
+        public async Task<Product> Create(Product entity)
+        {
+            var product = await oDataClient.For<Product>()
+             .Set(entity)
+             .InsertEntryAsync();
+            return product;
         }
 
-        public async Task<Product> CreateProduct(Product entity)
+        public async Task<Product> Update(Product entity)
         {
-            throw new NotImplementedException();
+            var product = await oDataClient.For<Product>()
+             .Key(entity.Id)
+             .Set(entity)
+             .UpdateEntryAsync();
+            return product;
         }
 
-        public async Task<Product> UpdateProduct(Product entity)
+        public async Task<Product> Delete(int id)
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task<Product> DeleteProduct(int id)
-        {
-            throw new NotImplementedException();
+            var product = await oDataClient.For<Product>().Filter(x => x.Id == id).ExecuteAsSingleAsync();
+            await oDataClient.For<Product>()
+            .Key(id)
+            .DeleteEntryAsync();
+            return product;
         }
     }
 }

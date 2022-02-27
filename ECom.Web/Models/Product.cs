@@ -1,10 +1,15 @@
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
-
+using System.Collections.Generic;
 
 namespace ECom.Web.Models
 {
     public class Product
     {
+        public Product()
+        {
+           // ProductCategorySelectList = new List<SelectListItem>();
+        }
         public int Id { get; set; }
         public string Name { get; set; }
         public string SKU { get; set; }
@@ -20,5 +25,8 @@ namespace ECom.Web.Models
         public int StockCount { get; set; }
         public int ProductCategoryId { get; set; }
         public ProductCategory ProductCategory { get; set; }
+        //public List<SelectListItem> ProductCategorySelectList { get; set; }
+        public string ErrorMessage { get; set; }
+        public string SuccessMessage { get; set; }
     }
 }

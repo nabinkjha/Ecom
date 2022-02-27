@@ -2,7 +2,7 @@
 {
     public class ApplicationLoginViewModel
     {
-        public string Token { get; set; }
-        public string Message { get; set; }
+        public string token { get; set; }
+        public string message { get; set; }
     }
 }
