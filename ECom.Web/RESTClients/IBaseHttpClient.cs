@@ -13,7 +13,7 @@ namespace WebApp.RESTClients
 
         Task<TEntity> Create(TEntity entity);
         Task<TEntity> Update(TEntity entity);
-        Task<TEntity> Delete(int id);
+        Task Delete(int id);
 
     }
 }

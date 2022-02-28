@@ -8,6 +8,7 @@ using ECom.Core.Entities;
 using Microsoft.AspNetCore.OData.Formatter;
 using System.Collections.Generic;
 using ECom.API.Controllers.OData.Login;
+using Microsoft.AspNetCore.OData.Deltas;
 
 namespace ECom.API.Controllers.OData.v2
 {
@@ -26,7 +27,7 @@ namespace ECom.API.Controllers.OData.v2
         /// Request for v2/Product
         /// </summary>
         /// <returns>List of Products</returns>
-        [EnableQuery(PageSize = 10, MaxExpansionDepth = 5)]
+        [EnableQuery]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Product>))]
         [ProducesResponseType(404)]
         [HttpGet("v2/Product")]
@@ -40,15 +41,16 @@ namespace ECom.API.Controllers.OData.v2
         /// Use the GET http verb
         /// Request for v2/Product(3)
         /// </summary>
-        /// <param name="key"></param>
+        /// <param name="id"></param>
         /// <returns>Single Product</returns>
         [ProducesResponseType(200, Type = typeof(Product))]
         [ProducesResponseType(404)]
-        [HttpGet("v2/Product({id})")]
-        [HttpGet("v2/Product/{id}")]
-        public IActionResult Get([FromODataUri] int key)
+        [EnableQuery]
+        [HttpGet("v2/Product/{id:int}")]
+        [HttpGet("v2/Product({id:int})")]
+        public IActionResult GetProduct(int id)
         {
-            var entity = _uow.Product.Get(key);
+            var entity = _uow.Product.Get(id);
             if (entity == null)
             {
                 return NotFound();
@@ -133,6 +135,32 @@ namespace ECom.API.Controllers.OData.v2
             _uow.Product.Update(product);
             _uow.Commit();
             return NoContent();
+        }
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        [HttpPatch("v2/Product({id})")]
+        [HttpPatch("v2/Product/{id}")]
+        public IActionResult Patch(int id, Delta<Product> product)
+        {
+            if (product != null)
+            {
+                var original = _uow.Product.Get(id);
+                if (original == null)
+                {
+                    return NotFound($"Not found product with id = {id}");
+                }
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                product.Patch(original);
+                _uow.Commit();
+                return Updated(original);
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
         }
         /// <summary>
         /// Use the DELETE http verb

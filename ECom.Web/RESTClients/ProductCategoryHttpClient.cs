@@ -27,7 +27,7 @@ namespace WebApp.RESTClients
             {
                 productCategoriesCommand.Skip(param.start);
             }
-            if (param.order.Length > 0)
+            if (param.order?.Length > 0)
             {
                 var sortColumn = param.SortColumn.Split(" ");
                 if (sortColumn.Length > 1)
@@ -37,6 +37,10 @@ namespace WebApp.RESTClients
                     else
                         productCategoriesCommand = productCategoriesCommand.OrderBy(sortColumn[0]);
                 }
+            }
+            else
+            {
+                productCategoriesCommand = productCategoriesCommand.OrderBy("Name");
             }
             var productCategories = await productCategoriesCommand.FindEntriesAsync(annotations);
             var result = new ProductCategorySearchResult
@@ -72,13 +76,11 @@ namespace WebApp.RESTClients
             return productCategory;
         }
 
-        public async Task<ProductCategory> Delete(int id)
+        public async Task Delete(int id)
         {
-            var productCategory = await oDataClient.For<ProductCategory>().Filter(x => x.Id == id).ExecuteAsSingleAsync();
             await oDataClient.For<ProductCategory>()
             .Key(id)
             .DeleteEntryAsync();
-            return productCategory;
         }
     }
 

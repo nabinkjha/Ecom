@@ -223,21 +223,37 @@ function objectifyForm(formArray) {//serialize data function
 
 function displayDeleteAlert(message, callbackFunction, inputParam) {
     swal({
-        title: "Are you sure?",
+        title: 'Are you sure?',
         text: message,
-        type: "warning",
+        icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: "#DD6B55",
-        confirmButtonText: "Yes, delete it!",
-        cancelButtonText: "No, cancel!",
-        closeOnConfirm: true,
-        closeOnCancel: true
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
     },
         function (isConfirm) {
             if (isConfirm) {
                 callbackFunction(inputParam);
             } else {
-                swal("Cancelled", message, "error");
+                swal("Cancelled", "Your imaginary file is safe :)", "error");
             }
         });
+    //swal({
+    //    title: "Are you sure?",
+    //    text: message,
+    //    type: "warning",
+    //    showCancelButton: true,
+    //    confirmButtonColor: "#DD6B55",
+    //    confirmButtonText: "Yes, delete it!",
+    //    cancelButtonText: "No, cancel!",
+    //    closeOnConfirm: true,
+    //    closeOnCancel: true
+    //},
+    //    function (isConfirm) {
+    //        if (isConfirm) {
+    //            callbackFunction(inputParam);
+    //        } else {
+    //            swal("Cancelled", message, "error");
+    //        }
+    //    });
 }

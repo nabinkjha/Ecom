@@ -1,5 +1,6 @@
 ﻿@model ECom.Web.Models.Product
 <form id="fromProduct" class="form-horizontal" role="form" asp-controller="Product" asp-action="Save">
+    <input type="hidden" asp-for="Id" />
     <div class="row">
         <div class="col-md-12">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -89,7 +90,7 @@
         <div class="col-md-12">
             <div class="form-group">
                 <label asp-for="ProductCategoryId" class="control-label"></label>
-                <select asp-for="ProductCategoryId" class="form-control" asp-items="ViewBag.ProductCategoryId"></select>
+                <select asp-for="ProductCategoryId" class="form-control" asp-items="Model.ProductCategorySelectList"></select>
             </div>
         </div>
     </div>

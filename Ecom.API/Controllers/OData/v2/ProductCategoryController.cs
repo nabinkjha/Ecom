@@ -25,9 +25,9 @@ namespace ECom.API.Controllers.OData.v2
         /// <returns>List of ProductCategory</returns>
         /// <response code="200">Returns IEnumerable of ProductCategory </response>
         /// <response code="401">If the user is not authorize or JWT token expired</response>   
-        [EnableQuery(PageSize = 10, MaxExpansionDepth = 5)]
+        [EnableQuery]
         [ProducesResponseType(200, Type = typeof(IEnumerable<ProductCategory>))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(404)]
         [HttpGet("v2/ProductCategory")]
         public IActionResult Get()
         {

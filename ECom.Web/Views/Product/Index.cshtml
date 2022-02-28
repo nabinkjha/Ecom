@@ -3,6 +3,8 @@
     var parentDivModel = new ModalDialogViewModel { ParentDivId = "divProduct" };
 }
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="~/lib/sweetalert/dist/sweetalert.css" />
+
 <div class="text-center">
     <div class="col-lg-12">
         <div class="card">
@@ -27,66 +29,17 @@
 
 <partial name="ModalDialog" model="@parentDivModel" />
 @section Scripts{
+    <environment names="Development">
+        <script src="~/lib/sweetalert/dist/sweetalert-dev.js"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/lib/sweetalert/dist/sweetalert.min.js"></script>
+    </environment>
     <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
     <script src="~/js/site.js"></script>
     <script src="~/js/Product/index.js"></script>
     <script>
         var baseUrl = "@Url.Content("~/")";
-        $(function () {
-            loadProduct();
-            $(document).keypress(function (e) {
-                if (e.which == 13) {
-                   loadProduct();
-                }
-            });
-        })
-     
-        function loadProduct() {
-            $('#productTableId').dataTable().fnDestroy();
-            $('#productTableId').DataTable({
-                searchDelay: 500,
-                "processing": true,
-                "serverSide": true,
-                "filter": true,
-                "ordering": true,
-                "deferRender": true,
-                "drawCallback": function () {
-                    $("#dataTable_wrapper").children().eq(1).css("overflow", "auto");
-                },
-                //"ajax": baseUrl +"sample.json",
-                "ajax": {
-                    "type": "POST",
-                    "url": baseUrl + "Product/GetProductList",
-                    "datatype": "json",
-                    "contentType": "application/json; charset=utf-8",
-                    //"headers": { 'RequestVerificationToken': $('#__RequestVerificationToken').val() },
-                    "data": function (data) {
-                        return JSON.stringify(data);
-                    }
-                },
-                "columnDefs": [{
-                    "targets": [0],
-                    "visible": false,
-                    "searchable": false
-                },
-                {
-                    "targets": 4,
-                    "data": "edit_link",
-                    "render": function (data, type, row, meta) {
-                        return "<button type='button' class='btn btn-primary mr-1' onclick=editProduct('" + row.id + "');  >Edit</button><button type='button' class='btn btn-danger' onclick=deleteProduct('" + row.id + "'); >Delete</button>";
-                    }
-                }
-                ],
-                "columns": [
-                    { "data": "id", "name": "Id", "autoWidth": true },
-                    { "data": "sku", "name": "SKU", "autoWidth": true },
-                    { "data": "slug", "name": "Slug", "autoWidth": true },
-                    { "data": "name", "name": "Name", "autoWidth": true },
-                ],
-                "dom": "<'row'<'col-sm-6'l><'col-sm-6'<'#buttonContainer.site-datatable-button-container'>f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-                "order": [1, "desc"]
-            });
-            $("#buttonContainer").addClass("float-right").append("<button class='btn btn-sm bg-success' onclick='createProduct()'>Create</button>");
-        }
+
     </script>
 }
