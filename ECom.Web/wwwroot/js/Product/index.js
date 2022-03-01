@@ -8,7 +8,6 @@ function editProduct(id) {
     showDialogWindow("divProduct", "frmProduct", url, "Edit Product");
 }
 function deleteProduct(id) {
-    debugger;
     var url = "/Product/Delete?id=" + id;
     $.ajax({
         url: url,
@@ -18,6 +17,7 @@ function deleteProduct(id) {
         type: "POST",
         success: function (data) {
             swal("Deleted!", data.message, "success");
+            loadProduct();
         }
     });
     return false;
@@ -47,7 +47,6 @@ function loadProduct() {
         "drawCallback": function () {
             $("#dataTable_wrapper").children().eq(1).css("overflow", "auto");
         },
-        //"ajax": baseUrl +"sample.json",
         "ajax": {
             "type": "POST",
             "url": baseUrl + "Product/GetProductList",

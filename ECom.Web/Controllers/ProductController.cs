@@ -7,7 +7,7 @@ using WebApp.RESTClients;
 
 namespace ECom.Web.Controllers
 {
-    public class ProductController : Controller
+    public class ProductController : BaseController
     {
         private readonly ILogger<ProductController> _logger;
         public IProductHttpClient _productHttpClient;
@@ -20,6 +20,8 @@ namespace ECom.Web.Controllers
         }
         public IActionResult Index()
         {
+            AddPageHeader("Products", "");
+            AddBreadcrumb("Product", "/Product");
             return View();
         }
 
@@ -44,7 +46,7 @@ namespace ECom.Web.Controllers
             await PopulateProductCategorySelectList(product);
             return PartialView("_Edit", product);
         }
-        private async Task<Product>  PopulateProductCategorySelectList(Product product)
+        private async Task<Product> PopulateProductCategorySelectList(Product product)
         {
             var param = new ProductCategorySearchParameter { length = 100 };
             var productCategories = await _productCategoryHttpClient.GetSearchResult(param);
@@ -58,6 +60,7 @@ namespace ECom.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Save(int id, [Bind("Id,Name,SKU,Slug,IsFeatured,ImageUrl,CreatedDate,Description,Price,Rating,Brand,ReviewCount,StockCount,ProductCategoryId")] Product product)
         {
+            var action = id == 0 ? "Created" : "Updated";
             bool success;
             if (!ModelState.IsValid)
             {
@@ -65,16 +68,16 @@ namespace ECom.Web.Controllers
             }
             product = id == 0 ? await _productHttpClient.Create(product) : await _productHttpClient.Update(product);
             success = string.IsNullOrWhiteSpace(product.ErrorMessage);
-            return Json(new { success, message = success ? product.SuccessMessage : product.ErrorMessage });
+            return Json(new { success, message = success ? $"The product {action} successfully" : product.ErrorMessage, title = "Product " + action });
         }
 
-    
+
         [HttpPost]
-       // [ValidateAntiForgeryToken]
+        // [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
             await _productHttpClient.Delete(id);
-            return Json(new {message = "Product deleted successfully." });
+            return Json(new { message = "Product deleted successfully.", title = "Product Deleted" });
         }
     }
 

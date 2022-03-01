@@ -134,27 +134,28 @@ $(function () {
     });
 });
 
-function displaySuccessMessage(message) {
+function displaySuccessMessage(title,message) {
     var type = 'success';
-    displayMessage(message, type, type);
+    displayMessage(title, message, type);
 }
 
-function displayErrorMessage(message) {
+function displayErrorMessage(title,message) {
     var type = 'error';
-    displayMessage(message, type, 'Error');
+    displayMessage(title, message, type);
 }
 
-function displayWarningMessage(message) {
+function displayWarningMessage(title,message) {
     var type = 'warning';
-    displayMessage(message, type, type);
+    displayMessage(title, message, type);
 }
-function displayInfoMessage(message) {
+
+function displayInfoMessage(title,message) {
     var type = 'info';
-    displayMessage(message, type, type);
+    displayMessage(title, message, type);
 }
-function displayMessage(message, type, title) {
-   
-   
+
+function displayMessage(title,message, type) {
+    swal(title, message, type);
 }
 
 function showDialogWindow(parentDivId, formId, url, title) {
@@ -166,7 +167,7 @@ function showDialogWindow(parentDivId, formId, url, title) {
         type: "GET",
         success: function (data) {
             if (data.message) {
-                displayErrorMessage(data.message);
+                displayErrorMessage(title,data.message);
             } else {
                 $(".modal-title").text(title);
                 $(".modal-body").html(data);
@@ -180,8 +181,7 @@ function showDialogWindow(parentDivId, formId, url, title) {
     return false;
 };
 
-function submitModalForm(form, event, refreshElementId) {
-    console.log('Person save URL ' + $(form).attr('action'));
+function submitModalForm(form, event) {
     event.preventDefault();
     event.stopImmediatePropagation();
     var model = objectifyForm(form.serializeArray());
@@ -194,16 +194,11 @@ function submitModalForm(form, event, refreshElementId) {
         data: model,
         success: function (result) {
             if (result.message) {
-                $(".close").click();
-                $(".btn-filter").click();
-                displaySuccessMessage(result.message);
-
+                $(".btnClose").click();
+                displaySuccessMessage(result.title,result.message);
             } else {
                 $(".modal-body").html(result);
             }
-            refeshDiv = setTimeout(function () {
-                $("#" + refreshElementId).click();
-            }, waitingTime);
         }
     });
 
@@ -238,22 +233,4 @@ function displayDeleteAlert(message, callbackFunction, inputParam) {
                 swal("Cancelled", "Your imaginary file is safe :)", "error");
             }
         });
-    //swal({
-    //    title: "Are you sure?",
-    //    text: message,
-    //    type: "warning",
-    //    showCancelButton: true,
-    //    confirmButtonColor: "#DD6B55",
-    //    confirmButtonText: "Yes, delete it!",
-    //    cancelButtonText: "No, cancel!",
-    //    closeOnConfirm: true,
-    //    closeOnCancel: true
-    //},
-    //    function (isConfirm) {
-    //        if (isConfirm) {
-    //            callbackFunction(inputParam);
-    //        } else {
-    //            swal("Cancelled", message, "error");
-    //        }
-    //    });
 }

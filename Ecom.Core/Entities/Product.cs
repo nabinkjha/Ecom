@@ -7,33 +7,33 @@ namespace ECom.Core.Entities
     public class Product
     {
         [Key]
-        [JsonPropertyName("id")]
+        //[JsonPropertyName("id")]
         public int Id { get; set; }
-        [JsonPropertyName("name")]
+        //[JsonPropertyName("name")]
         public string Name { get; set; }
-        [JsonPropertyName("sku")]
+        //[JsonPropertyName("sku")]
         public string SKU { get; set; }
-        [JsonPropertyName("slug")]
+        //[JsonPropertyName("slug")]
         public string Slug { get; set; }
-        [JsonPropertyName("isfeatured")]
+        //[JsonPropertyName("isfeatured")]
         public bool IsFeatured { get; set; }// Featured products are displayed on home page
-        [JsonPropertyName("imageurl")]
+        //[JsonPropertyName("imageurl")]
         public string ImageUrl { get; set; }// Image URL of the main image
-        [JsonPropertyName("createddate")]
+        //[JsonPropertyName("createddate")]
         public DateTime CreatedDate { get; set; }
-        [JsonPropertyName("description")]
+        //[JsonPropertyName("description")]
         public string Description { get; set; }
-        [JsonPropertyName("price")]
+        //[JsonPropertyName("price")]
         public decimal Price { get; set; }
-        [JsonPropertyName("rating")]
+        //[JsonPropertyName("rating")]
         public float? Rating { get; set; }
-        [JsonPropertyName("brand")]
+        //[JsonPropertyName("brand")]
         public string Brand { get; set; }
-        [JsonPropertyName("reviewcount")]
+        //[JsonPropertyName("reviewcount")]
         public int ReviewCount { get; set; }
-        [JsonPropertyName("stockcount")]
+        //[JsonPropertyName("stockcount")]
         public int StockCount { get; set; }
-        [JsonPropertyName("productcategoryid")]
+        //[JsonPropertyName("productcategoryid")]
         public int ProductCategoryId { get; set; }
         public ProductCategory ProductCategory { get; set; }
         public ICollection<ProductImage> ProductImages { get; set; }// Multiple images for carosel view

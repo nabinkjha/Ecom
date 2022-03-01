@@ -2,40 +2,44 @@
     ViewData["Title"] = "Product";
     var parentDivModel = new ModalDialogViewModel { ParentDivId = "divProduct" };
 }
-<link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" />
-<link rel="stylesheet" href="~/lib/sweetalert/dist/sweetalert.css" />
+<environment names="Development">
+    <link rel="stylesheet" href="~/lib/datatables/css/dataTables.bootstrap4.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/sweetalert/dist/sweetalert.css" />
+</environment>
+<environment names="Staging,Production">
+    <link rel="stylesheet" href="~/lib/datatables/css/dataTables.bootstrap4.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/sweetalert/dist/sweetalert.css" />
+</environment>
 
-<div class="text-center">
-    <div class="col-lg-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table id="productTableId" class="table table-bordered" cellspacing="0" width="100%">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>SKU</th>
-                                <th>slug</th>
-                                <th>Name</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
-            </div>
-        </div>
+<div class="box">
+    <div class="box-body table-responsive">
+        <table class="table table-bordered table-hover" id="productTableId" cellspacing="0" align="center">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>SKU</th>
+                    <th>slug</th>
+                    <th>Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+        </table>
     </div>
 </div>
+
 
 <partial name="ModalDialog" model="@parentDivModel" />
 @section Scripts{
     <environment names="Development">
+        <script src="~/lib/datatables/js/jquery.dataTables.js" asp-append-version="true"></script>
+        <script src="~/lib/datatables/js/dataTables.bootstrap4.js" asp-append-version="true"></script>
         <script src="~/lib/sweetalert/dist/sweetalert-dev.js"></script>
     </environment>
     <environment names="Staging,Production">
+        <script src="~/lib/datatables/js/jquery.dataTables.min.js" asp-append-version="true"></script>
+        <script src="~/lib/datatables/js/dataTables.bootstrap4.min.js" asp-append-version="true"></script>
         <script src="~/lib/sweetalert/dist/sweetalert.min.js"></script>
     </environment>
-    <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
     <script src="~/js/site.js"></script>
     <script src="~/js/Product/index.js"></script>
     <script>
