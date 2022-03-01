@@ -1,94 +1,107 @@
 ﻿@model ECom.Web.Models.Product
-
-@{
-    ViewData["Title"] = "Edit";
-}
-
-<h1>Edit</h1>
-
-<h4>Product</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+<form id="fromProduct" class="form-horizontal" role="form" asp-controller="Product" asp-action="Save">
+    <input type="hidden" asp-for="Id" />
+    <div class="row">
+        <div class="col-md-12">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-md-12">
             <div class="form-group">
                 <label asp-for="SKU" class="control-label"></label>
                 <input asp-for="SKU" class="form-control" />
                 <span asp-validation-for="SKU" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-md-12">
             <div class="form-group">
                 <label asp-for="Slug" class="control-label"></label>
                 <input asp-for="Slug" class="form-control" />
                 <span asp-validation-for="Slug" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-md-12">
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="IsFeatured" /> @Html.DisplayNameFor(model => model.IsFeatured)
                 </label>
             </div>
+        </div>
+        <div class="col-md-12">
             <div class="form-group">
                 <label asp-for="ImageUrl" class="control-label"></label>
                 <input asp-for="ImageUrl" class="form-control" />
                 <span asp-validation-for="ImageUrl" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-md-12">
             <div class="form-group">
                 <label asp-for="CreatedDate" class="control-label"></label>
                 <input asp-for="CreatedDate" class="form-control" />
                 <span asp-validation-for="CreatedDate" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-md-12">
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-md-12">
             <div class="form-group">
                 <label asp-for="Price" class="control-label"></label>
                 <input asp-for="Price" class="form-control" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-md-12">
             <div class="form-group">
                 <label asp-for="Rating" class="control-label"></label>
                 <input asp-for="Rating" class="form-control" />
                 <span asp-validation-for="Rating" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-md-12">
             <div class="form-group">
                 <label asp-for="Brand" class="control-label"></label>
                 <input asp-for="Brand" class="form-control" />
                 <span asp-validation-for="Brand" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-md-12">
             <div class="form-group">
                 <label asp-for="ReviewCount" class="control-label"></label>
                 <input asp-for="ReviewCount" class="form-control" />
                 <span asp-validation-for="ReviewCount" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-md-12">
             <div class="form-group">
                 <label asp-for="StockCount" class="control-label"></label>
                 <input asp-for="StockCount" class="form-control" />
                 <span asp-validation-for="StockCount" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-md-12">
             <div class="form-group">
                 <label asp-for="ProductCategoryId" class="control-label"></label>
-                <select asp-for="ProductCategoryId" class="form-control" asp-items="ViewBag.ProductCategoryId"></select>
-                <span asp-validation-for="ProductCategoryId" class="text-danger"></span>
+                <select asp-for="ProductCategoryId" class="form-control" asp-items="Model.ProductCategorySelectList"></select>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
+</form>
+<script type="text/javascript">
+    $(function () {
+        $("#fromProduct").submit(function (event) {
+            submitModalForm($(this), event, "lnkRefreshProduct");
+        });
+    });
+</script>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

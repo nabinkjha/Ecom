@@ -16,6 +16,9 @@ namespace ECom.Web.Extensions
             services.AddHttpClient<IProductHttpClient, ProductHttpClient>()
                     .AddPolicyHandler(request => request.Method == HttpMethod.Get ? retryPolicy : noOp)
                     .AddPolicyHandler(GetCircuitBreakerPolicy());
+            services.AddHttpClient<IProductCategoryHttpClient, ProductCategoryHttpClient>()
+                  .AddPolicyHandler(request => request.Method == HttpMethod.Get ? retryPolicy : noOp)
+                  .AddPolicyHandler(GetCircuitBreakerPolicy());
             return services;
         }
         //https://docs.microsoft.com/en-us/dotnet/architecture/microservices/implement-resilient-applications/implement-http-call-retries-exponential-backoff-polly

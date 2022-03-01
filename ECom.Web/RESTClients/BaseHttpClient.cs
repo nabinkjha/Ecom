@@ -15,28 +15,26 @@ namespace ECom.Web.RESTClients
         private readonly HttpClient _httpClient;
         protected IODataClient oDataClient;
         private ApplicationParameters applicationParameters;
-        private readonly JsonSerializerOptions _options;
         public BaseHttpClient(IOptions<ApplicationParameters> config, HttpClient httpClient)
         {
             applicationParameters = config.Value;
             _httpClient = httpClient;
-            var user = GetTokenToAccessOdataAPI().Result;
-            var setting = GetSettingWithToken(applicationParameters.ApiUrl, user.Token);
+            var token = GetTokenToAccessOdataAPI().Result;
+            var setting = GetSettingWithToken(applicationParameters.ApiUrl, token);
             oDataClient = new ODataClient(setting);
-            _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         }
-        private async Task<ApplicationLoginViewModel> GetTokenToAccessOdataAPI()
+        private async Task<string> GetTokenToAccessOdataAPI()
         {
             _httpClient.DefaultRequestHeaders.Add(applicationParameters.ApiKeyName, applicationParameters.ApiKeyValue);
             var result = await _httpClient.PostAsJsonAsync(applicationParameters.ApiUrl+"Authenticate", new
             {
                 UserName = applicationParameters.ApiUserName,
                 Password = applicationParameters.ApiPassword
-            }, _options);
+            });
             result.EnsureSuccessStatusCode();
             var content = await result.Content.ReadAsStringAsync();
             var user = JsonSerializer.Deserialize<ApplicationLoginViewModel>(content);
-            return user;
+            return user.token;
         }
 
         private ODataClientSettings GetSettingWithToken(string url, string accessToken)

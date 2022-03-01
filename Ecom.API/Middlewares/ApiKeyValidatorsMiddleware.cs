@@ -18,7 +18,7 @@ namespace ECom.API.Middlewares
 
         public async Task Invoke(HttpContext context, IUnitOfWork uow)
         {
-            var ignorePath = new List<string> { "/swagger/v1/swagger.json", "/swagger/v2/swagger.json", "/index.html" };
+            var ignorePath = new List<string> { "/favicon-16x16.png", "/favicon-32x32.png", "/swagger-ui.css", "/swagger-ui-bundle.js", "/swagger-ui-standalone-preset.js", "/swagger/v1/swagger.json", "/swagger/v2/swagger.json", "/index.html" };
             if (!ignorePath.Contains(context.Request.Path.Value))// to ignore Swagger UI
             {
                 if (!context.Request.Headers.Keys.Contains("api-key"))

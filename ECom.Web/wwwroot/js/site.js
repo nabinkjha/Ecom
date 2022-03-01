@@ -93,3 +93,144 @@ function useDeleteConfirmation() {
         }
     });
 }
+var reminder;
+var redirect;
+var refeshDiv;
+var waitingTime = 1000;
+//var msgSession = 'Warning: Within next 3 minutes, if you do not do anything, system will refresh the login credential. Please save changed data.';
+var ajaxInProgress = $('#ajaxInProgress'), timer;
+
+
+$(function () {
+    $.ajaxSetup({
+        cache: false,
+        headers: {
+            'X-CSRF-Token': $('input:hidden[name="__RequestVerificationToken"]').val()
+        },
+        xhrFields: {
+            withCredentials: true
+        },
+        complete: function () {
+            clearTimeout(timer);
+            $(".panel-overlay").remove();
+        },
+        error: function (x, e) {
+            if (x.status == 0) {
+                displayErrorMessage('You are offline!!\n Please Check Your Network.');
+            } else if (x.status == 404) {
+                displayErrorMessage('Requested URL not found.');
+                /*------>*/
+            } else if (x.status == 500) {
+                displayErrorMessage('Internel Server Error.');
+            } else if (e == 'parsererror') {
+                displayErrorMessage('Error.\nParsing JSON Request failed.');
+            } else if (e == 'timeout') {
+                displayErrorMessage('Request Time out.');
+            } else {
+                displayErrorMessage('Unknown Error.\n' + x.responseText);
+            }
+            $(".panel-overlay").remove();
+        }
+    });
+});
+
+function displaySuccessMessage(title,message) {
+    var type = 'success';
+    displayMessage(title, message, type);
+}
+
+function displayErrorMessage(title,message) {
+    var type = 'error';
+    displayMessage(title, message, type);
+}
+
+function displayWarningMessage(title,message) {
+    var type = 'warning';
+    displayMessage(title, message, type);
+}
+
+function displayInfoMessage(title,message) {
+    var type = 'info';
+    displayMessage(title, message, type);
+}
+
+function displayMessage(title,message, type) {
+    swal(title, message, type);
+}
+
+function showDialogWindow(parentDivId, formId, url, title) {
+    $.ajax({
+        url: url,
+        headers: {
+            'X-CSRF-Token': $('input:hidden[name="__RequestVerificationToken"]').val()
+        },
+        type: "GET",
+        success: function (data) {
+            if (data.message) {
+                displayErrorMessage(title,data.message);
+            } else {
+                $(".modal-title").text(title);
+                $(".modal-body").html(data);
+                $("#" + parentDivId).modal("show");
+                //hack to get clientside validation working
+                //if (formId !== '')
+                //    $.validator.unobtrusive.parse("#" + formId);
+            }
+        }
+    });
+    return false;
+};
+
+function submitModalForm(form, event) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    var model = objectifyForm(form.serializeArray());
+    $.ajax({
+        url: $(form).attr('action'),
+        type: "POST",
+        headers: {
+            'X-CSRF-Token': $('input:hidden[name="__RequestVerificationToken"]').val()
+        },
+        data: model,
+        success: function (result) {
+            if (result.message) {
+                $(".btnClose").click();
+                displaySuccessMessage(result.title,result.message);
+            } else {
+                $(".modal-body").html(result);
+            }
+        }
+    });
+
+}
+
+function objectifyForm(formArray) {//serialize data function
+    var propertyNames = [];
+    var returnArray = {};
+    for (var i = 0; i < formArray.length; i++) {
+        if (propertyNames.indexOf(formArray[i]['name']) === -1) {
+            returnArray[formArray[i]['name']] = formArray[i]['value'];
+            propertyNames.push(formArray[i]['name']);
+        }
+    }
+    return returnArray;
+}
+
+function displayDeleteAlert(message, callbackFunction, inputParam) {
+    swal({
+        title: 'Are you sure?',
+        text: message,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    },
+        function (isConfirm) {
+            if (isConfirm) {
+                callbackFunction(inputParam);
+            } else {
+                swal("Cancelled", "Your imaginary file is safe :)", "error");
+            }
+        });
+}

@@ -10,12 +10,10 @@
             <div class="card-body">
                 <div class="table-responsive">
 
-                    <table id="productTableId" class="table table-bordered" cellspacing="0" width="100%">
+                    <table id="productCategoriesTableId" class="table table-bordered" cellspacing="0" width="100%">
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>SKU</th>
-                                <th>slug</th>
                                 <th>Name</th>
                                 <th>Actions</th>
                             </tr>
@@ -32,17 +30,17 @@
     <script>
         var baseUrl = "@Url.Content("~/")";
         $(function () {
-            LoadTable();
+            loadProductCategories();
             $(document).keypress(function (e) {
                 if (e.which == 13) {
-                    LoadTable();
+                    loadProductCategories();
                 }
             });
         })
 
-        function LoadTable() {
-            $('#productTableId').dataTable().fnDestroy();
-            $('#productTableId').DataTable({
+        function loadProductCategories() {
+            $('#productCategoriesTableId').dataTable().fnDestroy();
+            $('#productCategoriesTableId').DataTable({
                 "processing": true,
                 "serverSide": true,
                 "filter": true,
@@ -51,13 +49,12 @@
                 "drawCallback": function () {
                     $("#dataTable_wrapper").children().eq(1).css("overflow", "auto");
                 },
-                //"ajax": baseUrl +"sample.json",
                 "ajax": {
                     "type": "POST",
-                    "url": baseUrl + "ProductCategory/GetList",
+                    "url": baseUrl + "ProductCategory/GetSearchResult",
                     "datatype": "json",
                     "contentType": "application/json; charset=utf-8",
-                    //"headers": { 'RequestVerificationToken': $('#__RequestVerificationToken').val() },
+                    "headers": { 'RequestVerificationToken': $('#__RequestVerificationToken').val() },
                     "data": function (data) {
                         return JSON.stringify(data);
                     }
@@ -68,20 +65,18 @@
                     "searchable": false
                 },
                     {
-                        "targets": 4,
+                        "targets": 2,
                         "data": "edit_link",
                         "render": function (data, type, row, meta) {
-                            return "<button type='button' class='btn btn-primary mr-1' onclick=EditProduct('" + row.id + "'); >Edit</button><button type='button' class='btn btn-danger' onclick=DeleteProduct('" + row.id + "'); >Delete</button>";
+                            return "<button type='button' class='btn btn-primary mr-1' onclick=editProductCategory('" + row.id + "'); >Edit</button><button type='button' class='btn btn-danger' onclick=deleteProductCategory('" + row.id + "'); >Delete</button>";
                         }
                     }
                 ],
                 "columns": [
                     { "data": "id", "name": "Id", "autoWidth": true},
-                    { "data": "sku", "name": "SKU", "autoWidth": true},
-                    { "data": "slug", "name": "Slug", "autoWidth": true},
                     { "data": "name", "name": "Name", "autoWidth": true},
                 ],
-             "order":[1,"desc"]
+             "order":[0,"desc"]
             })
         }
     </script>
