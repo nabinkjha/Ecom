@@ -6,6 +6,7 @@ using ECom.Core.Entities;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using ECom.API.Controllers.OData.Login;
+using System.Threading.Tasks;
 
 namespace ECom.API.Controllers.OData.v2
 {
@@ -80,10 +81,10 @@ namespace ECom.API.Controllers.OData.v2
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("v2/ProductCategory")]
-        public ActionResult<ProductCategory> Create(ProductCategory item)
+        public async Task<IActionResult> Create(ProductCategory item)
         {
             _uow.ProductCategory.Add(item);
-            _uow.Commit();
+            await _uow.Commit();
             return Ok(item);
         }
         /// <summary>
@@ -112,7 +113,7 @@ namespace ECom.API.Controllers.OData.v2
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [HttpPut("v2/ProductCategory")]
-        public IActionResult Update(int id, ProductCategory item)
+        public async Task<IActionResult> Update(int id, ProductCategory item)
         {
             if (item == null || item.Id != id)
             {
@@ -125,7 +126,7 @@ namespace ECom.API.Controllers.OData.v2
             }
             productType.Name = item.Name;
             _uow.ProductCategory.Update(productType);
-            _uow.Commit();
+            await _uow.Commit();
             return NoContent();
         }
         /// <summary>
@@ -140,7 +141,7 @@ namespace ECom.API.Controllers.OData.v2
         /// <response code="401">If the user is not authorize or JWT token expired</response>
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [HttpDelete("v2/ProductCategory")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var item = _uow.Product.Get(id);
             if (item == null)
@@ -148,7 +149,7 @@ namespace ECom.API.Controllers.OData.v2
                 return NotFound();
             }
             _uow.Product.Delete(item.Id);
-            _uow.Commit();
+            await _uow.Commit();
             return NoContent();
         }
     }

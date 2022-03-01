@@ -1,4 +1,4 @@
-﻿//using Microsoft.AspNetCore.Mvc;
+//using Microsoft.AspNetCore.Mvc;
 //using Microsoft.AspNetCore.OData.Query;
 //using Microsoft.AspNetCore.OData.Routing.Controllers;
 //using ECom.Contracts.Data.Repositories;
@@ -7,7 +7,6 @@
 //using Microsoft.AspNetCore.Http;
 //using System.Collections.Generic;
 //using System.Net.Mime;
-
 //namespace ECom.API.Controllers.OData.v1
 //{
 //    [Produces(MediaTypeNames.Application.Json)]
@@ -134,3 +133,4 @@
 //        }
 //    }
 //}
+
