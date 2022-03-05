@@ -27,7 +27,43 @@ namespace ECom.Web.Controllers
             var result = await _productCategoryHttpClient.GetSearchResult(param);
             return Json(result);
         }
-        
-     
+        // GET: Products/Create
+        public IActionResult Create()
+        {
+            var productCategory =new ProductCategory();
+            return PartialView("_Edit", productCategory);
+        }
+
+        // GET: Products/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            var productCategory = await _productCategoryHttpClient.GetById(id.Value);
+            return PartialView("_Edit", productCategory);
+        }
+       
+      
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Save(int id, [Bind("Id,Name")] ProductCategory productCategory)
+        {
+            var action = id == 0 ? "Created" : "Updated";
+            bool success;
+            if (!ModelState.IsValid)
+            {
+                return PartialView(productCategory);
+            }
+            productCategory = id == 0 ? await _productCategoryHttpClient.Create(productCategory) : await _productCategoryHttpClient.Update(productCategory);
+            success = string.IsNullOrWhiteSpace(productCategory.ErrorMessage);
+            return Json(new { success, message = success ? $"The product {action} successfully" : productCategory.ErrorMessage, title = "Product " + action });
+        }
+
+
+        [HttpPost("Delete")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _productCategoryHttpClient.Delete(id);
+            return Json(new { message = "Product deleted successfully.", title = "Product Deleted" });
+        }
+
     }
 }

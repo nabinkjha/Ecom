@@ -30,20 +30,8 @@
 
 <partial name="ModalDialog" model="@parentDivModel" />
 @section Scripts{
-    <environment names="Development">
-        <script src="~/lib/datatables/js/jquery.dataTables.js" asp-append-version="true"></script>
-        <script src="~/lib/datatables/js/dataTables.bootstrap4.js" asp-append-version="true"></script>
-        <script src="~/lib/sweetalert/dist/sweetalert-dev.js"></script>
-    </environment>
-    <environment names="Staging,Production">
-        <script src="~/lib/datatables/js/jquery.dataTables.min.js" asp-append-version="true"></script>
-        <script src="~/lib/datatables/js/dataTables.bootstrap4.min.js" asp-append-version="true"></script>
-        <script src="~/lib/sweetalert/dist/sweetalert.min.js"></script>
-    </environment>
-    <script src="~/js/site.js"></script>
     <script src="~/js/Product/index.js"></script>
     <script>
         var baseUrl = "@Url.Content("~/")";
-
     </script>
 }

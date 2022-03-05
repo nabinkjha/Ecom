@@ -55,7 +55,7 @@ namespace WebApp.RESTClients
 
         public async Task<ProductCategory> GetById(int id)
         {
-            var productCategory = await oDataClient.For<ProductCategory>().Filter(x => x.Id == id).ExecuteAsSingleAsync();
+            var productCategory = await oDataClient.For<ProductCategory>("ProductCategory").Filter(x => x.Id == id).FindEntryAsync();
             return productCategory;
         }
 

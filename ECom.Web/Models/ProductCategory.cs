@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace ECom.Web.Models
 {
@@ -10,6 +10,10 @@ namespace ECom.Web.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public bool IsActive { get; set; }
-        public ICollection<Product> Products { get; set; }
+        public ICollection<Product> Products{get; set;}
+        [JsonIgnore]
+        public string ErrorMessage { get; set; }
+        [JsonIgnore]
+        public string SuccessMessage { get; set; }
     }
 }
