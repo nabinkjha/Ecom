@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
-using Microsoft.AspNetCore.OData.Routing.Controllers;
 using ECom.Contracts.Data.Repositories;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
@@ -10,10 +9,10 @@ using System.Collections.Generic;
 using ECom.API.Controllers.OData.Login;
 
 using Microsoft.AspNetCore.OData.Deltas;
+using System.Threading.Tasks;
 
 namespace ECom.API.Controllers.OData.v2
 {
-    [Route("v2/[controller]")]
     public class ProductController : BaseODataController
     {
         private readonly IUnitOfWork _uow;
