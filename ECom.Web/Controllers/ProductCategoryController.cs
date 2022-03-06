@@ -44,7 +44,7 @@ namespace ECom.Web.Controllers
       
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Save(int id, [Bind("Id,Name")] ProductCategory productCategory)
+        public async Task<IActionResult> Save(int id, [Bind("Id,Name,Description,IsActive")] ProductCategory productCategory)
         {
             var action = id == 0 ? "Created" : "Updated";
             bool success;
@@ -54,15 +54,15 @@ namespace ECom.Web.Controllers
             }
             productCategory = id == 0 ? await _productCategoryHttpClient.Create(productCategory) : await _productCategoryHttpClient.Update(productCategory);
             success = string.IsNullOrWhiteSpace(productCategory.ErrorMessage);
-            return Json(new { success, message = success ? $"The product {action} successfully" : productCategory.ErrorMessage, title = "Product " + action });
+            return Json(new { success, message = success ? $"The product category {action} successfully" : productCategory.ErrorMessage, title = "Product Category" + action });
         }
 
 
-        [HttpPost("Delete")]
+        [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
             await _productCategoryHttpClient.Delete(id);
-            return Json(new { message = "Product deleted successfully.", title = "Product Deleted" });
+            return Json(new { message = "Product Category deleted successfully.", title = "Product Category Deleted" });
         }
 
     }

@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using ECom.API.Controllers.OData.Login;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.OData.Deltas;
+using Microsoft.AspNetCore.OData.Formatter;
 
 namespace ECom.API.Controllers.OData.v2
 {
@@ -88,6 +90,38 @@ namespace ECom.API.Controllers.OData.v2
             return Ok(item);
         }
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        [HttpPatch("v2/ProductCategory({id})")]
+        [HttpPatch("v2/ProductCategory/{id}")]
+        public IActionResult Patch(int id, Delta<ProductCategory> item)
+        {
+            if (item != null)
+            {
+                var original = _uow.ProductCategory.Get(id);
+                if (original == null)
+                {
+                    return NotFound($"Not found ProductCategory with id = {id}");
+                }
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                item.Patch(original);
+                _uow.Commit();
+                return Updated(original);
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
+        }
+        /// <summary>
         /// Update a specific ProductCategory.
         /// </summary>
         /// <remarks>
@@ -140,15 +174,18 @@ namespace ECom.API.Controllers.OData.v2
         /// </summary>      
         /// <response code="401">If the user is not authorize or JWT token expired</response>
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [HttpDelete("v2/ProductCategory")]
-        public async Task<IActionResult> Delete(int id)
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        [HttpDelete("v2/ProductCategory({id})")]
+        [HttpDelete("v2/ProductCategory/{id}")]
+        public async Task<IActionResult> Delete([FromODataUri] int id)
         {
-            var item = _uow.Product.Get(id);
+            var item = _uow.ProductCategory.Get(id);
             if (item == null)
             {
                 return NotFound();
             }
-            _uow.Product.Delete(item.Id);
+            _uow.ProductCategory.Delete(item.Id);
             await _uow.Commit();
             return NoContent();
         }
