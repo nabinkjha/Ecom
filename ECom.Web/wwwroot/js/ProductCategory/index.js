@@ -65,16 +65,27 @@ function loadProductCategory() {
             "searchable": false
         },
         {
-            "targets": 2,
+            "targets": 4,
             "data": "edit_link",
             "render": function (data, type, row, meta) {
                 return "<button type='button' class='btn btn-primary mr-1' onclick=editProductCategory('" + row.id + "'); >Edit</button><button type='button' class='btn btn-danger' onclick=warnDeleteProductCategory('" + row.id + "','" + encodeURIComponent(row.name) + "');>Delete</button>";
             }
-        }
+            },
+            {
+                "render": function (data, type, row) {
+                    if (row['isActive'] === true)
+                        return '<span class="badge bg-success">Active</span>'
+                    else
+                        return '<span class="badge bg-danger">Inactive</span>';
+                },
+                "targets": [3]
+            },
         ],
         "columns": [
             { "data": "id", "name": "Id", "autoWidth": true },
             { "data": "name", "name": "Name", "autoWidth": true },
+            { "data": "description", "name": "Description", "autoWidth": true },
+            { "data": "isActive", "name": "IsActive", "autoWidth": true },
         ],
         "dom": "<'row'<'col-sm-6'l><'col-sm-6'<'#buttonContainer.site-datatable-button-container'>f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
         "order": [0, "desc"]
