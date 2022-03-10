@@ -22,7 +22,7 @@ function deleteProduct(id) {
     });
     return false;
 }
-function warnDeleteProduct(id,name) {
+function warnDeleteProduct(id, name) {
     var message = `The product ${decodeURI(name)} will be deleted permanently.`;
     displayDeleteAlert(message, deleteProduct, id);
 }
@@ -36,23 +36,30 @@ $(function () {
 })
 
 function loadProduct() {
-  
+
     var tableOptions = {
         searchDelay: 500,
 
         "serverSide": true,
         "filter": true,
+        "processing": true,
         "ordering": true,
         "deferRender": true,
         "drawCallback": function () {
             $("#dataTable_wrapper").children().eq(1).css("overflow", "auto");
+        },
+        language:
+        {
+            processing: "<div class=''><i class='fa fa-cog fa-spin site-loader-color'></i></div>",
+            search: "filter",
+            searchPlaceholder: "product name or desc"
         },
         "ajax": {
             "type": "POST",
             "url": baseUrl + "Product/GetProductList",
             "datatype": "json",
             "contentType": "application/json; charset=utf-8",
-            //"headers": { 'RequestVerificationToken': $('#__RequestVerificationToken').val() },
+            "headers": { 'RequestVerificationToken': $('#__RequestVerificationToken').val() },
             "data": function (data) {
                 data.FilterBy = [];
                 data.FilterBy.push({ entityName: "ProductCategory", propertyName: "ProductCategoryId", propertyValue: $('#filterProductCategoryId').val() })
@@ -60,19 +67,19 @@ function loadProduct() {
             }
         },
         "columnDefs": [
-            { "width": "5%", "targets": [5,6] },
+            { "width": "5%", "targets": [5, 6] },
             {
-            "targets": [0],
-            "visible": false,
-            "searchable": false
-        },
-        {
-            "targets": 5,
-            "data": "edit_link",
-            "searchable": false,
-            "render": function (data, type, row, meta) {
-                return "<button type='button' class='btn btn-primary mr-1' onclick=editProduct('" + row.id + "');><i class='fa fa-edit'></i> Edit</button>";
-            }
+                "targets": [0],
+                "visible": false,
+                "searchable": false
+            },
+            {
+                "targets": 5,
+                "data": "edit_link",
+                "searchable": false,
+                "render": function (data, type, row, meta) {
+                    return "<button type='button' class='btn btn-primary mr-1' onclick=editProduct('" + row.id + "');><i class='fa fa-edit'></i> Edit</button>";
+                }
             },
             {
                 "targets": 6,
@@ -84,34 +91,34 @@ function loadProduct() {
             }
         ],
         "columns": [
-            { "data": "id", "name": "Id", "autoWidth": true },
-            { "data": "sku", "name": "SKU", "autoWidth": true },
-            { "data": "slug", "name": "Slug", "autoWidth": true },
-            { "data": "name", "name": "Name", "autoWidth": true },
-            { "data": "category", "name": "Category", "autoWidth": true },
+            { "data": "id" },
+            { "data": "sku" },
+            { "data": "slug" },
+            { "data": "name" },
+            { "data": "category" },
         ],
         "dom": "<'row'<'col-sm-2 col-md-1'<'#actionButtonContainer'>><'col-sm-4 col-md-5'l><'col-sm-3 col-md-4'<'#filterContainer'>><'col-sm-3 col-md-2'f>>" +
             "<'row'<'col-sm-12'tr>>" +
             "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
         "order": [2, "asc"]
     };
-  
+
     $('#productTableId').dataTable().fnDestroy();
     var table = $('#productTableId').DataTable(tableOptions);
-    $("#actionButtonContainer").append($("<button class='btn btn-sm bg-success' onclick='createProduct()'><i class='fa fa-plus'></i>Add Product</button>"));
+    $("#actionButtonContainer").append($("<button class='btn btn-sm bg-success' onclick='createProduct()'><i class='fa fa-plus'></i>Add</button>"));
 
     //$("#productTableId_length").addClass("float-left").prepend("<button class='btn btn-sm bg-success' style='margin-right: 30px;' onclick='createProduct()'>Create</button>");
     //Take the category filter drop down and append it to the datatables_filter div. 
     //You can use this same idea to move the filter anywhere withing the datatable that you want.
     $("#filterContainer").append($("#divCategoryFilter"));
-  
+
     //Set the change event for the Category Filter dropdown to redraw the datatable each time
     //a user selects a new filter.
     $("#filterProductCategoryId").change(function (e) {
         table.draw();
     });
 
-   // table.draw();
+    // table.draw();
 
 
 }
