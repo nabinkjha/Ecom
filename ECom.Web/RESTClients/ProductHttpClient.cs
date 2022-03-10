@@ -6,19 +6,36 @@ using System.Linq;
 using ECom.Web.RESTClients;
 using Microsoft.Extensions.Options;
 using ECom.Web.Common;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace WebApp.RESTClients
 {
     public class ProductHttpClient : BaseHttpClient, IProductHttpClient
     {
-        public ProductHttpClient(IOptions<ApplicationParameters> config, HttpClient httpClient) : base(config, httpClient)
+        public ProductHttpClient(IOptions<ApplicationParameters> config, HttpClient httpClient, IMemoryCache memoryCache) : base(config, httpClient, memoryCache)
         {
 
         }
         public async Task<ProductSearchResult> GetSearchResult(ProductSearchParameter param)
         {
             var annotations = new ODataFeedAnnotations();
-            var productCommand = oDataClient.For<Product>().Top(param.length).Skip(param.start);
+            var productCommand = oDataClient.For<Product>()
+                .Expand(x => x.ProductCategory)
+                .Select(x => new { x.Id, x.Name, x.ProductCategory, x.Price, x.SKU, x.Slug, x.StockCount })
+                .Top(param.length)
+                .Skip(param.start);
+            if (param.FilterBy.Length >0)
+            {
+                if (param.FilterBy.Any(x=>x.PropertyName == "ProductCategoryId"))
+                {
+                    int productCategoryId = 0;
+                    int.TryParse(param.FilterBy.First(x => x.PropertyName == "ProductCategoryId").PropertyValue, out productCategoryId);
+                    if (productCategoryId > 0)
+                    {
+                        productCommand.Filter(x => x.ProductCategoryId == productCategoryId);
+                    }
+                }
+            }
             if (!string.IsNullOrEmpty(param.search?.value))
             {
                 productCommand.Filter(x => param.search.value.Contains(x.Name));
@@ -50,7 +67,7 @@ namespace WebApp.RESTClients
             var product = await oDataClient.For<Product>("Product").Filter(x => x.Id == id).FindEntryAsync();
             return product;
         }
-      
+
         public async Task<Product> Create(Product entity)
         {
             var product = await oDataClient.For<Product>()

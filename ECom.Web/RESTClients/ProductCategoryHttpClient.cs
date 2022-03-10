@@ -6,12 +6,13 @@ using System.Linq;
 using ECom.Web.RESTClients;
 using Microsoft.Extensions.Options;
 using ECom.Web.Common;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace WebApp.RESTClients
 {
     public class ProductCategoryHttpClient : BaseHttpClient, IProductCategoryHttpClient
     {
-        public ProductCategoryHttpClient(IOptions<ApplicationParameters> config, HttpClient httpClient) : base(config, httpClient)
+        public ProductCategoryHttpClient(IOptions<ApplicationParameters> config, HttpClient httpClient, IMemoryCache memoryCache) : base(config, httpClient, memoryCache)
         {
 
         }

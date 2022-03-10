@@ -53,6 +53,7 @@ namespace ECom.API
             services.AddMvc(c => c.Conventions.Add(new GroupControllerByVersion()));// decorate Controllers to distinguish SwaggerDoc (v1, v2, etc.)
             services.AddSwaggerGen(c =>
             {
+                c.EnableAnnotations();
                 c.DocumentFilter<CustomSwaggerFilter>();
                 c.OperationFilter<CustomHeaderFilter>();
                 c.SwaggerDoc("v1", new OpenApiInfo

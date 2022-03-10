@@ -10,6 +10,14 @@ namespace ECom.Web.Common
         public static List<SelectListItem> GetProductCategorySelectList(List<ProductCategory> model, int selectedId, bool addPleaseSelect = true)
         {
             var roleSelectList = new List<SelectListItem>();
+            if (addPleaseSelect)
+            {
+                roleSelectList.Add(new SelectListItem
+                {
+                    Value = "",
+                    Text = "Please Select"
+                });
+            }
             roleSelectList.AddRange(model.Where(x => !string.IsNullOrWhiteSpace(x?.Name)).Select(x => new SelectListItem
             {
                 Value = x.Id.ToString(),

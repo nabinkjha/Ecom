@@ -1,7 +1,9 @@
 ﻿using ECom.Web.Common;
 using ECom.Web.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebApp.RESTClients;
 
@@ -18,11 +20,15 @@ namespace ECom.Web.Controllers
             _productHttpClient = productHttpClient;
             _productCategoryHttpClient = productCategoryHttpClient;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             AddPageHeader("Products", "");
             AddBreadcrumb("Product", "/Product");
-            return View();
+            var searchParameter = new ProductSearchParameter
+            {
+                ProductCategorySelectList = await PopulateProductCategorySelectList(0, true)
+            };
+            return View(searchParameter);
         }
 
         [HttpPost]
@@ -35,7 +41,8 @@ namespace ECom.Web.Controllers
         // GET: Products/Create
         public async Task<IActionResult> Create()
         {
-            var product = await PopulateProductCategorySelectList(new Product());
+            var product = new Product { CreatedDate = System.DateTime.Now};
+            product.ProductCategorySelectList = await PopulateProductCategorySelectList();
             return PartialView("_Edit", product);
         }
 
@@ -43,15 +50,14 @@ namespace ECom.Web.Controllers
         public async Task<IActionResult> Edit(int? id)
         {
             var product = await _productHttpClient.GetById(id.Value);
-            await PopulateProductCategorySelectList(product);
+            product.ProductCategorySelectList = await PopulateProductCategorySelectList(product.ProductCategoryId);
             return PartialView("_Edit", product);
         }
-        private async Task<Product> PopulateProductCategorySelectList(Product product)
+        private async Task<List<SelectListItem>> PopulateProductCategorySelectList(int productCategoryId = 0,bool addPleaseDefault=false)
         {
             var param = new ProductCategorySearchParameter { length = 100 };
             var productCategories = await _productCategoryHttpClient.GetSearchResult(param);
-            product.ProductCategorySelectList = SelectedListHelper.GetProductCategorySelectList(productCategories.Data, product.ProductCategoryId);
-            return product;
+           return SelectedListHelper.GetProductCategorySelectList(productCategories.Data, productCategoryId, addPleaseDefault);
         }
         // POST: Products/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
