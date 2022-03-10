@@ -28,7 +28,7 @@ namespace ECom.API.Data
                 Random rand = new Random();
                 if (unitOfWork.ProductCategory.Count() == 0)
                 {
-                    for (int i = 1; i <= 500; i++)
+                    for (int i = 1; i <= 20; i++)
                     {
                         unitOfWork.ProductCategory.Add(new ProductCategory
                         {

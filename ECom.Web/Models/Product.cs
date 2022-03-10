@@ -39,7 +39,8 @@ namespace ECom.Web.Models
         public int StockCount { get; set; }
         [JsonPropertyName("productCategoryId")]
         public int ProductCategoryId { get; set; }
-        
+        [JsonPropertyName("category")]
+        public string Category { get { return ProductCategory?.Name; } }
         public ProductCategory ProductCategory { get; set; }
         [JsonIgnore]
         public IEnumerable<SelectListItem> ProductCategorySelectList { get; set; }
