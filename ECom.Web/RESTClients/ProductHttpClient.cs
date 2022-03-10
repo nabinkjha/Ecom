@@ -24,33 +24,12 @@ namespace WebApp.RESTClients
                 .Select(x => new { x.Id, x.Name, x.ProductCategory, x.Price, x.SKU, x.Slug, x.StockCount })
                 .Top(param.length)
                 .Skip(param.start);
-            if (param.FilterBy.Length >0)
-            {
-                if (param.FilterBy.Any(x=>x.PropertyName == "ProductCategoryId"))
-                {
-                    int productCategoryId = 0;
-                    int.TryParse(param.FilterBy.First(x => x.PropertyName == "ProductCategoryId").PropertyValue, out productCategoryId);
-                    if (productCategoryId > 0)
-                    {
-                        productCommand.Filter(x => x.ProductCategoryId == productCategoryId);
-                    }
-                }
-            }
+            AddCustomFilterByCondtion(param, productCommand);
             if (!string.IsNullOrEmpty(param.search?.value))
             {
-                productCommand.Filter(x => param.search.value.Contains(x.Name));
+                productCommand.Filter(x => x.Name.Contains(param.search.value) || x.Description.Contains(param.search.value));
             }
-            if (param.order?.Length > 0)
-            {
-                var sortColumn = param.SortColumn.Split(" ");
-                if (sortColumn.Length > 1)
-                {
-                    if (sortColumn[1] == "desc")
-                        productCommand = productCommand.OrderByDescending(sortColumn[0]);
-                    else
-                        productCommand = productCommand.OrderBy(sortColumn[0]);
-                }
-            }
+            productCommand = AddSortingCondition(param, productCommand);
             var products = await productCommand.FindEntriesAsync(annotations);
             var result = new ProductSearchResult
             {
@@ -60,6 +39,48 @@ namespace WebApp.RESTClients
                 RecordsTotal = annotations.Count ?? 0
             };
             return result;
+        }
+
+        private static void AddCustomFilterByCondtion(ProductSearchParameter param, IBoundClient<Product> productCommand)
+        {
+            if (param.FilterBy.Length > 0)
+            {
+                if (param.FilterBy.Any(x => x.PropertyName == "ProductCategoryId"))
+                {
+                    int.TryParse(param.FilterBy.First(x => x.PropertyName == "ProductCategoryId").PropertyValue, out int productCategoryId);
+                    if (productCategoryId > 0)
+                    {
+                        productCommand.Filter(x => x.ProductCategoryId == productCategoryId);
+                    }
+                }
+            }
+        }
+
+        private static IBoundClient<Product> AddSortingCondition(ProductSearchParameter param, IBoundClient<Product> productCommand)
+        {
+            if (param.order?.Length > 0)
+            {
+                var sortColumn = param.SortColumn.Split(" ");
+                if (sortColumn.Length > 1)
+                {
+                    var sortColumnName = sortColumn[0];
+                    if (sortColumnName.Equals("category"))
+                    {
+                        if (sortColumn[1] == "desc")
+                            productCommand = productCommand.OrderByDescending(x => x.ProductCategory.Name);
+                        else
+                            productCommand = productCommand.OrderBy(x => x.ProductCategory.Name);
+                    }
+                    else
+                    {
+                        if (sortColumn[1] == "desc")
+                            productCommand = productCommand.OrderByDescending(sortColumnName);
+                        else
+                            productCommand = productCommand.OrderBy(sortColumnName);
+                    }
+                }
+            }
+            return productCommand;
         }
 
         public async Task<Product> GetById(int id)
