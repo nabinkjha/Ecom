@@ -2,7 +2,7 @@
 
 namespace DataTable
 {
-    public class FilterBy
+    public class CustomFilterBy
     {
         [JsonProperty("entityName")]
         public string EntityName { get; set; }

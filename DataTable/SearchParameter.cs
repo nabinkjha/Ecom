@@ -25,7 +25,7 @@ namespace DataTable
         public long RecordsTotal { get; set; }
         public List<T> Data { get; set; }
         [JsonProperty("filterBy")]
-        public FilterBy[] FilterBy { get; set; }
+        public CustomFilterBy[] FilterBy { get; set; }
     }
    
 }
