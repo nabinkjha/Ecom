@@ -78,7 +78,7 @@ function loadProduct() {
                 "data": "edit_link",
                 "searchable": false,
                 "render": function (data, type, row, meta) {
-                    return "<button type='button' class='btn btn-primary mr-1' onclick=editProduct('" + row.id + "');><i class='fa fa-edit'></i> Edit</button>";
+                    return "<button type='button' class='btn btn-primary ' onclick=editProduct('" + row.id + "');><i class='fa fa-edit'></i><span class='ml-1'>Edit</span></button>";
                 }
             },
             {
@@ -86,7 +86,7 @@ function loadProduct() {
                 "data": "delete_link",
                 "searchable": false,
                 "render": function (data, type, row, meta) {
-                    return "<button type='button' class='btn btn-danger' onclick=warnDeleteProduct('" + row.id + "','" + encodeURIComponent(row.name) + "'); ><i class='fa fa-trash'></i>Delete</button>";
+                    return "<button type='button' class='btn btn-danger' onclick=warnDeleteProduct('" + row.id + "','" + encodeURIComponent(row.name) + "'); ><i class='fa fa-trash'></i><span class='ml-1'>Delete</span></button>";
                 }
             }
         ],
@@ -97,15 +97,18 @@ function loadProduct() {
             { "data": "name" },
             { "data": "category" },
         ],
-        "dom": "<'row'<'col-sm-2 col-md-1'<'#actionButtonContainer'>><'col-sm-4 col-md-5'l><'col-sm-3 col-md-4'<'#filterContainer'>><'col-sm-3 col-md-2'f>>" +
+        dom: "<'row'<'col-sm-2 col-md-1'<'#actionButtonContainer'>><'col-sm-4 col-md-5'Bl><'col-sm-3 col-md-4'<'#filterContainer'>><'col-sm-3 col-md-2'f>>" +
             "<'row'<'col-sm-12'tr>>" +
             "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+        buttons: [
+           'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
         "order": [2, "asc"]
     };
 
     $('#productTableId').dataTable().fnDestroy();
     var table = $('#productTableId').DataTable(tableOptions);
-    $("#actionButtonContainer").append($("<button class='btn btn-sm bg-success' onclick='createProduct()'><i class='fa fa-plus'></i>Add</button>"));
+    $("#actionButtonContainer").append($("<button class='btn btn-md dt-button' onclick='createProduct()'><i class='fa fa-plus'></i><span>&nbsp;Add</span></button>"));
 
     //$("#productTableId_length").addClass("float-left").prepend("<button class='btn btn-sm bg-success' style='margin-right: 30px;' onclick='createProduct()'>Create</button>");
     //Take the category filter drop down and append it to the datatables_filter div. 
@@ -117,8 +120,4 @@ function loadProduct() {
     $("#filterProductCategoryId").change(function (e) {
         table.draw();
     });
-
-    // table.draw();
-
-
 }
