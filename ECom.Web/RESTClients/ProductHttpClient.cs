@@ -7,14 +7,17 @@ using ECom.Web.RESTClients;
 using Microsoft.Extensions.Options;
 using ECom.Web.Common;
 using Microsoft.Extensions.Caching.Memory;
+using AutoMapper;
+using System.Collections.Generic;
 
 namespace WebApp.RESTClients
 {
     public class ProductHttpClient : BaseHttpClient, IProductHttpClient
     {
-        public ProductHttpClient(IOptions<ApplicationParameters> config, HttpClient httpClient, IMemoryCache memoryCache) : base(config, httpClient, memoryCache)
+        private IMapper _mapper;
+        public ProductHttpClient(IMapper mapper, IOptions<ApplicationParameters> config, HttpClient httpClient, IMemoryCache memoryCache) : base(config, httpClient, memoryCache)
         {
-
+            _mapper = mapper;
         }
         public async Task<ProductSearchResult> GetSearchResult(ProductSearchParameter param)
         {
@@ -34,7 +37,7 @@ namespace WebApp.RESTClients
             var result = new ProductSearchResult
             {
                 draw = param.draw,
-                Data = products.ToList(),
+                Data = _mapper.Map<List<ProductViewModel>>(products.ToList()),
                 RecordsFiltered = annotations.Count ?? 0,
                 RecordsTotal = annotations.Count ?? 0
             };
@@ -83,27 +86,30 @@ namespace WebApp.RESTClients
             return productCommand;
         }
 
-        public async Task<Product> GetById(int id)
+        public async Task<ProductViewModel> GetById(int id)
         {
             var product = await oDataClient.For<Product>("Product").Filter(x => x.Id == id).FindEntryAsync();
-            return product;
+            var result = _mapper.Map<ProductViewModel>(product);
+            return result;
         }
 
-        public async Task<Product> Create(Product entity)
+        public async Task<ProductViewModel> Create(Product entity)
         {
-            var product = await oDataClient.For<Product>()
+            var product = await oDataClient.For<Product>("Product")// This name "Product" must match with API entity name.
              .Set(entity)
              .InsertEntryAsync();
-            return product;
+            var result = _mapper.Map<ProductViewModel>(product);
+            return result;
         }
 
-        public async Task<Product> Update(Product entity)
+        public async Task<ProductViewModel> Update(Product entity)
         {
-            var product = await oDataClient.For<Product>()
+            var product = await oDataClient.For<Product>("Product")
              .Key(entity.Id)
              .Set(entity)
              .UpdateEntryAsync();
-            return product;
+            var result = _mapper.Map<ProductViewModel>(product);
+            return result;
         }
 
         public async Task Delete(int id)

@@ -1,4 +1,4 @@
-﻿@model ECom.Web.Models.Product
+﻿@model ECom.Web.Models.ProductViewModel
 <form id="fromProduct" class="form-horizontal" role="form" asp-controller="Product" asp-action="Save">
     <input type="hidden" asp-for="Id" />
     <div class="row">
@@ -98,7 +98,7 @@
 <script type="text/javascript">
     $(function () {
         $("#fromProduct").submit(function (event) {
-            submitModalForm($(this), event, "lnkRefreshProduct");
+            submitModalForm($(this), event, loadProductTable);
         });
     });
 </script>

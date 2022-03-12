@@ -1,22 +1,22 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace ECom.Web.Models
 {
     public class Product
     {
-        public Product()
-        {
-           // ProductCategorySelectList = new List<SelectListItem>();
-        }
         [JsonPropertyName("id")]
         public int Id { get; set; }
         [JsonPropertyName("name")]
+        [Required]
         public string Name { get; set; }
         [JsonPropertyName("sku")]
+        [Required]
         public string SKU { get; set; }
+        [Required]
         [JsonPropertyName("slug")]
         public string Slug { get; set; }
         [JsonPropertyName("isFeatured")]
@@ -27,6 +27,8 @@ namespace ECom.Web.Models
         public DateTime CreatedDate { get; set; }
         [JsonPropertyName("description")]
         public string Description { get; set; }
+        [Required]
+        [Range(1,100)]
         [JsonPropertyName("price")]
         public decimal Price { get; set; }
         [JsonPropertyName("rating")]
@@ -36,17 +38,13 @@ namespace ECom.Web.Models
         [JsonPropertyName("reviewCount")]
         public int ReviewCount { get; set; }
         [JsonPropertyName("stockCount")]
+        [Range(1, 100)]
+        [Required]
         public int StockCount { get; set; }
+        [Required]
         [JsonPropertyName("productCategoryId")]
         public int ProductCategoryId { get; set; }
-        [JsonPropertyName("category")]
-        public string Category { get { return ProductCategory?.Name; } }
         public ProductCategory ProductCategory { get; set; }
-        [JsonIgnore]
-        public IEnumerable<SelectListItem> ProductCategorySelectList { get; set; }
-        [JsonIgnore]
-        public string ErrorMessage { get; set; }
-        [JsonIgnore]
-        public string SuccessMessage { get; set; }
+       
     }
 }

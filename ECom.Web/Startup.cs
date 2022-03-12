@@ -15,12 +15,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Polly;
-using Polly.Extensions.Http;
-using System;
-using System.Net.Http;
-using WebApp.RESTClients;
+using System.Text.Json;
+using System.Reflection;
 
 namespace AdminLTE
 {
@@ -55,6 +51,7 @@ namespace AdminLTE
             {
                 builder.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
             });
+            services.AddAutoMapper(typeof(Startup));
             services.Configure<ApplicationParameters>(
               this.Configuration.GetSection("ApplicationParameters"));
 
@@ -73,7 +70,7 @@ namespace AdminLTE
                                  .RequireAuthenticatedUser()
                                  .Build();
                 config.Filters.Add(new AuthorizeFilter(policy));
-            });
+            }).AddJsonOptions(o => { o.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase; }); 
 
             mvcBuilder.SetCompatibilityVersion(CompatibilityVersion.Latest);
 

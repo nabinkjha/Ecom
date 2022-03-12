@@ -27,15 +27,10 @@ function warnDeleteProduct(id, name) {
     displayDeleteAlert(message, deleteProduct, id);
 }
 $(function () {
-    loadProduct();
-    $(document).keypress(function (e) {
-        if (e.which == 13) {
-            loadProduct();
-        }
-    });
+    loadProductTable();
 })
 
-function loadProduct() {
+function loadProductTable() {
 
     var tableOptions = {
         searchDelay: 500,
@@ -110,7 +105,6 @@ function loadProduct() {
     var table = $('#productTableId').DataTable(tableOptions);
     $("#actionButtonContainer").append($("<button class='btn btn-md dt-button' onclick='createProduct()'><i class='fa fa-plus'></i><span>&nbsp;Add</span></button>"));
 
-    //$("#productTableId_length").addClass("float-left").prepend("<button class='btn btn-sm bg-success' style='margin-right: 30px;' onclick='createProduct()'>Create</button>");
     //Take the category filter drop down and append it to the datatables_filter div. 
     //You can use this same idea to move the filter anywhere withing the datatable that you want.
     $("#filterContainer").append($("#divCategoryFilter"));

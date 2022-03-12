@@ -2,17 +2,18 @@
 
 namespace WebApp.RESTClients
 {
-    public interface IBaseHttpClient<TEntity, TParam,TResult> 
-        where TEntity : class
-         where TParam : class
-         where TResult : class
+    public interface IBaseHttpClient<TRequestEntity,TResponseEntity, TSearchParam,TSearchResult> 
+        where TRequestEntity : class
+        where TResponseEntity : class
+        where TSearchParam : class
+        where TSearchResult : class
     {
-        Task<TResult> GetSearchResult(TParam searchParameter);
+        Task<TSearchResult> GetSearchResult(TSearchParam searchParameter);
 
-        Task<TEntity> GetById(int id);
+        Task<TResponseEntity> GetById(int id);
 
-        Task<TEntity> Create(TEntity entity);
-        Task<TEntity> Update(TEntity entity);
+        Task<TResponseEntity> Create(TRequestEntity entity);
+        Task<TResponseEntity> Update(TRequestEntity entity);
         Task Delete(int id);
 
     }

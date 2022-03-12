@@ -1,7 +1,6 @@
-﻿using DataTable;
-namespace ECom.Web.Models
+﻿namespace ECom.Web.Models
 {
-    public class ProductSearchResult : SearchResult<Product>
+    public class ProductSearchResult : SearchResult<ProductViewModel>
     {
 
     }

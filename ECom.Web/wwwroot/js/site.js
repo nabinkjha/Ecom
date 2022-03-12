@@ -181,7 +181,7 @@ function showDialogWindow(parentDivId, formId, url, title) {
     return false;
 };
 
-function submitModalForm(form, event) {
+function submitModalForm(form, event,callbackOnSuccess) {
     event.preventDefault();
     event.stopImmediatePropagation();
     var model = objectifyForm(form.serializeArray());
@@ -195,7 +195,8 @@ function submitModalForm(form, event) {
         success: function (result) {
             if (result.message) {
                 $(".btnClose").click();
-                displaySuccessMessage(result.title,result.message);
+                displaySuccessMessage(result.title, result.message);
+                callbackOnSuccess();
             } else {
                 $(".modal-body").html(result);
             }
