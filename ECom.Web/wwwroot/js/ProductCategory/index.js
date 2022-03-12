@@ -1,11 +1,6 @@
 ﻿
 $(function () {
-    loadProductCategory();
-    $(document).keypress(function (e) {
-        if (e.which == 13) {
-            loadProductCategory();
-        }
-    });
+    loadProductCategoryTable();
 });
 
 function createProductCategory() {
@@ -17,6 +12,7 @@ function editProductCategory(id) {
     var url = "/ProductCategory/Edit?id=" + id;
     showDialogWindow("divProductCategory", "frmProductCategory", url, "Edit ProductCategory");
 }
+
 function deleteProductCategory(id) {
     var url = "/ProductCategory/Delete?id=" + id;
     $.ajax({
@@ -32,13 +28,14 @@ function deleteProductCategory(id) {
     });
     return false;
 }
+
 function warnDeleteProductCategory(id, name) {
     var message = `The ProductCategory ${decodeURI(name)} will be deleted permanently.`;
     displayDeleteAlert(message, deleteProductCategory, id);
 }
 
 
-function loadProductCategory() {
+function loadProductCategoryTable() {
     $('#productCategoryTableId').dataTable().fnDestroy();
     $('#productCategoryTableId').DataTable({
         "processing": true,

@@ -25,14 +25,13 @@
                 </label>
             </div>
         </div>
+    </div>
 </form>
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 <script type="text/javascript">
     $(function () {
         $("#frmProductCategory").submit(function (event) {
-            submitModalForm($(this), event);
+            submitModalForm($(this), event, loadProductCategoryTable);
         });
     });
 </script>
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

@@ -173,8 +173,8 @@ function showDialogWindow(parentDivId, formId, url, title) {
                 $(".modal-body").html(data);
                 $("#" + parentDivId).modal("show");
                 //hack to get clientside validation working
-                //if (formId !== '')
-                //    $.validator.unobtrusive.parse("#" + formId);
+                if (formId !== '')
+                    $.validator.unobtrusive.parse("#" + formId);
             }
         }
     });
