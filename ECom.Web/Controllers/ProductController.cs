@@ -44,7 +44,7 @@ namespace ECom.Web.Controllers
         // GET: Products/Create
         public async Task<IActionResult> Create()
         {
-            var product = new ProductViewModel { CreatedDate = System.DateTime.Now};
+            var product = new ProductViewModel { CreatedDate = System.DateTime.Now };
             product.ProductCategorySelectList = await PopulateProductCategorySelectList();
             return PartialView("_Edit", product);
         }
@@ -56,11 +56,11 @@ namespace ECom.Web.Controllers
             product.ProductCategorySelectList = await PopulateProductCategorySelectList(product.ProductCategoryId);
             return PartialView("_Edit", product);
         }
-        private async Task<List<SelectListItem>> PopulateProductCategorySelectList(int productCategoryId = 0,bool addPleaseDefault=false)
+        private async Task<List<SelectListItem>> PopulateProductCategorySelectList(int productCategoryId = 0, bool addPleaseDefault = false)
         {
             var param = new ProductCategorySearchParameter { length = 100 };
             var productCategories = await _productCategoryHttpClient.GetSearchResult(param);
-           return SelectedListHelper.GetProductCategorySelectList(productCategories.Data, productCategoryId, addPleaseDefault);
+            return SelectedListHelper.GetProductCategorySelectList(productCategories.Data, productCategoryId, addPleaseDefault);
         }
         // POST: Products/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -72,11 +72,12 @@ namespace ECom.Web.Controllers
             var action = id == 0 ? "Created" : "Updated";
             if (!ModelState.IsValid)
             {
+                productViewModel.ProductCategorySelectList = await PopulateProductCategorySelectList(productViewModel.ProductCategoryId, id == 0);
                 return PartialView("_Edit", productViewModel);
             }
             var product = _mapper.Map<Product>(productViewModel);
             productViewModel = id == 0 ? await _productHttpClient.Create(product) : await _productHttpClient.Update(product);
-            return Json(new { success= !productViewModel.HasError, message =$"The product {productViewModel.Name+" "+action} successfully", title = "Product " + action });
+            return Json(new { success = !productViewModel.HasError, message = $"The product {productViewModel.Name + " " + action} successfully", title = "Product " + action });
         }
 
 
