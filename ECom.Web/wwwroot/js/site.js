@@ -173,15 +173,15 @@ function showDialogWindow(parentDivId, formId, url, title) {
                 $(".modal-body").html(data);
                 $("#" + parentDivId).modal("show");
                 //hack to get clientside validation working
-                //if (formId !== '')
-                //    $.validator.unobtrusive.parse("#" + formId);
+                if (formId !== '')
+                    $.validator.unobtrusive.parse("#" + formId);
             }
         }
     });
     return false;
 };
 
-function submitModalForm(form, event) {
+function submitModalForm(form, event,callbackOnSuccess) {
     event.preventDefault();
     event.stopImmediatePropagation();
     var model = objectifyForm(form.serializeArray());
@@ -195,7 +195,8 @@ function submitModalForm(form, event) {
         success: function (result) {
             if (result.message) {
                 $(".btnClose").click();
-                displaySuccessMessage(result.title,result.message);
+                displaySuccessMessage(result.title, result.message);
+                callbackOnSuccess();
             } else {
                 $(".modal-body").html(result);
             }

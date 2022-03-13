@@ -1,5 +1,5 @@
-﻿@model ECom.Web.Models.Product
-<form id="fromProduct" class="form-horizontal" role="form" asp-controller="Product" asp-action="Save">
+﻿@model ECom.Web.Models.ProductViewModel
+<form id="frmProduct" class="form-horizontal" role="form" asp-controller="Product" asp-action="Save">
     <input type="hidden" asp-for="Id" />
     <div class="row">
         <div class="col-md-12">
@@ -95,13 +95,12 @@
         </div>
     </div>
 </form>
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 <script type="text/javascript">
     $(function () {
-        $("#fromProduct").submit(function (event) {
-            submitModalForm($(this), event, "lnkRefreshProduct");
+        $("#frmProduct").submit(function (event) {
+            submitModalForm($(this), event, loadProductTable);
         });
     });
 </script>
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+

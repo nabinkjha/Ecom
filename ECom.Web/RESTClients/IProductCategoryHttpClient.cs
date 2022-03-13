@@ -2,7 +2,7 @@
 
 namespace WebApp.RESTClients
 {
-    public interface IProductCategoryHttpClient : IBaseHttpClient<ProductCategory, ProductCategorySearchParameter, ProductCategorySearchResult>
+    public interface IProductCategoryHttpClient : IBaseHttpClient<ProductCategory,ProductCategory, ProductCategorySearchParameter, ProductCategorySearchResult>
     {
        
     }
