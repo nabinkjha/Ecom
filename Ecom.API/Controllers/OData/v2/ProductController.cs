@@ -94,7 +94,7 @@ namespace ECom.API.Controllers.OData.v2
             }
             _uow.Product.Add(item);
             await _uow.Commit();
-            return Ok(item);
+            return Created(item);
         }
         /// <summary>
         /// Update a specific Product.
@@ -130,18 +130,24 @@ namespace ECom.API.Controllers.OData.v2
             var product = _uow.Product.Get(id);
             if (product == null)
             {
-                return NotFound();
+                return NotFound($"Not found product with id = {id}");
             }
             product.Name = item.Name;
             _uow.Product.Update(product);
             await _uow.Commit();
-            return NoContent();
+            return Updated(product);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="product"></param>
+        /// <returns></returns>
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
         [HttpPatch("v2/Product({id})")]
         [HttpPatch("v2/Product/{id}")]
-        public IActionResult Patch(int id, Delta<Product> product)
+        public async Task<IActionResult> Patch(int id, Delta<Product> product)
         {
             if (product != null)
             {
@@ -155,7 +161,7 @@ namespace ECom.API.Controllers.OData.v2
                     return BadRequest(ModelState);
                 }
                 product.Patch(original);
-                _uow.Commit();
+                await _uow.Commit();
                 return Updated(original);
             }
             else
